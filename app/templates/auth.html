@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <title>{{ '注册' if register else '登录' }} · 领星接口文档问答</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}">
+  <script defer src="{{ url_for('static', filename='auth.js') }}"></script>
+</head>
+<body class="auth-page">
+  <main class="auth-card">
+    <a class="brand" href="/login"><span class="brand-mark">L</span><span>领星<span class="brand-sub">接口文档问答</span></span></a>
+    <h1>{{ '创建账户' if register else '欢迎回来' }}</h1>
+    <p>登录后保存独立对话，继续上次的问题。</p>
+    <nav class="auth-tabs" aria-label="账户操作"><a href="/login" class="{{ '' if register else 'active' }}">登录</a><a href="/register" class="{{ 'active' if register else '' }}">注册</a></nav>
+    <form id="auth-form" data-mode="{{ 'register' if register else 'login' }}">
+      <label for="username">用户名</label><input id="username" name="username" autocomplete="username" minlength="3" maxlength="32" required placeholder="3–32 位汉字、字母、数字或下划线">
+      <label for="password">密码</label><input id="password" name="password" type="password" autocomplete="{{ 'new-password' if register else 'current-password' }}" minlength="8" maxlength="128" required placeholder="至少 8 个字符">
+      {% if register %}<label for="confirm-password">确认密码</label><input id="confirm-password" name="confirm_password" type="password" autocomplete="new-password" minlength="8" maxlength="128" required>{% endif %}
+      <div class="error hidden" id="auth-error" role="alert"></div>
+      <button class="send auth-submit" id="auth-submit" type="submit">{{ '注册并登录' if register else '登录' }}</button>
+    </form>
+    <button class="secondary auth-submit" id="guest-login" type="button">以游客身份进入</button>
+    <p>游客对话临时保存，退出时清理；24 小时未活动自动清理。</p>
+  </main>
+</body>
+</html>

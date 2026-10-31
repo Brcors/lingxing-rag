@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <meta name="user-id" content="{{ user.id }}">
+  <meta name="user-mode" content="{{ 'guest' if user.is_guest else 'account' }}">
+  <title>领星 · 接口文档问答</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}">
+  <script defer src="{{ url_for('static', filename='app.js') }}"></script>
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <a class="brand" href="/"><span class="brand-mark">L</span><span>领星<span class="brand-sub">接口文档问答</span></span></a>
+      <button class="secondary new-conversation" id="new-conversation" type="button">＋ 新建对话</button>
+      <nav id="conversation-list" class="conversation-list" aria-label="我的对话"></nav>
+      <div class="sidebar-label">知识库</div>
+      <div class="knowledge-card"><span class="status-dot"></span><span id="index-label">正在连接文档库</span></div>
+      <p class="sidebar-note" id="index-detail">读取本地接口文档状态…</p>
+      <label class="sidebar-label" for="category">业务范围</label>
+      <select id="category" aria-label="选择业务范围"><option value="">全部业务</option></select>
+      <button class="secondary sidebar-action" id="update-index" type="button">更新文档索引 <span>↻</span></button>
+      <div class="sidebar-bottom"><span class="account-name">{{ user.username }}</span><button class="text-button" id="logout" type="button">{{ '退出游客' if user.is_guest else '退出登录' }}</button><br><small>{{ '临时对话 · 退出即清理' if user.is_guest else '个人对话独立保存 · 点赞知识共享' }}</small></div>
+    </aside>
+    <main>
+      <header class="topbar"><span id="conversation-title">新对话</span><span id="memory-label">独立对话</span><button class="text-button" id="clear-chat" type="button">新建对话</button></header>
+      <div class="workspace">
+        <div id="config-notice" class="notice hidden" role="status"></div>
+        {% if user.is_guest %}<div class="notice" role="status">游客模式：对话在退出或 24 小时未活动后清理。可查看共享知识，不能点赞写入。<a href="/register">注册账户</a>或<a href="/login">登录账户</a>以保存长期对话；切换账户会清理本次游客记录。</div>{% endif %}
+        <button class="secondary hidden" id="older-turns" type="button">加载更早的问答</button>
+        <section id="welcome" class="welcome">
+          <div class="eyebrow"><span class="tiny-line"></span> LINGXING API ASSISTANT</div>
+          <h1>从一个问题，<br>找到对应接口。</h1>
+          <p>查接口、理解参数、梳理调用流程。<br>基于本地领星文档，为每个回答提供依据。</p>
+          <div class="suggestions">
+            <button type="button" data-question="如何查询 FBA 货件列表？需要哪些参数？"><span>查找接口</span>如何查询 FBA 货件列表？<b>↗</b></button>
+            <button type="button" data-question="sid 和 mid 分别代表什么？从哪些接口获取？"><span>理解参数</span>sid 和 mid 分别代表什么？<b>↗</b></button>
+            <button type="button" data-question="STA 货件从创建到发货涉及哪些步骤和接口？"><span>梳理流程</span>STA 货件有哪些调用步骤？<b>↗</b></button>
+          </div>
+        </section>
+        <section id="conversation" class="conversation" aria-live="polite" aria-label="问答内容"></section>
+        <div id="error" class="error hidden" role="alert"></div>
+      </div>
+      <div class="composer-wrap">
+        <form id="question-form" class="composer">
+          <label class="sr-only" for="question">输入领星接口问题</label>
+          <textarea id="question" rows="2" maxlength="4000" placeholder="输入接口名称、参数，或描述你想完成的操作…" required></textarea>
+          <div class="composer-footer"><span id="activity">Enter 发送 · Shift + Enter 换行</span><div class="composer-actions"><label class="preview-toggle"><input type="checkbox" id="retrieve-only">仅检索</label><button class="send" id="send" type="submit">发送 <span>↑</span></button></div></div>
+        </form>
+        <p class="footnote">{% if user.is_guest %}游客问答临时存储，退出后清理。关闭浏览器不会立即清理，24 小时未活动后自动清理。{% else %}完整回答会保存到当前对话。点击 👍 后，该问答会加入所有账户共享的辅助知识库。{% endif %}</p>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

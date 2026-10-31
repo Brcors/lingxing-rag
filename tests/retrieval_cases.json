@@ -1,0 +1,10 @@
+[
+  {"question": "查询货件列表需要哪些请求参数？", "expected": "查询货件列表", "category": "FBA"},
+  {"question": "/erp/sc/data/fba_report/shipmentList 支持什么请求方式？", "expected": "查询货件列表"},
+  {"question": "我想获取亚马逊店铺的 sid，应该用哪个接口？", "expected": "查询亚马逊店铺列表", "category": "基础数据"},
+  {"question": "如何创建STA任务？", "expected": "创建STA任务", "category": "FBA"},
+  {"question": "查询利润报表-SKU 可以按什么时间查询？", "expected": "查询利润报表-SKU", "category": "财务"},
+  {"question": "STA货件流程说明里有哪些步骤？", "expected": "STA货件流程说明"},
+  {"question": "查询FBA货件商品FNSKU标签需要哪些参数？", "expected": "查询FBA货件商品FNSKU标签", "category": "FBA"},
+  {"question": "如何生成签名sign，哪些参数参与签名？", "expected": "领星 API 接入指南"}
+]

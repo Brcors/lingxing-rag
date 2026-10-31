@@ -1,0 +1,28 @@
+.venv/
+.venv.previous-machine-*/
+runtime/
+__pycache__/
+.pytest_cache/
+data/
+models/
+config_local.py
+*.log
+
+# Local credentials and private configuration
+config_local.*.py
+!config_local.example.py
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+.netrc
+_netrc
+
+# Local database files and editor state
+*.sqlite
+*.sqlite3
+*.db
+.idea/

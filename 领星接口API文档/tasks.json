@@ -1,0 +1,3254 @@
+[
+  {
+    "category": "General",
+    "title": "API地图",
+    "url": "https://apidoc.lingxing.com/#/map/product/product_manage",
+    "status": "pending"
+  },
+  {
+    "category": "General",
+    "title": "接口更新日志",
+    "url": "https://apidoc.lingxing.com/#/docs/ApiUpdateLog",
+    "status": "pending"
+  },
+  {
+    "category": "General",
+    "title": "Token生成测试",
+    "url": "https://apidoc.lingxing.com/#/docs/TestToken/Token",
+    "status": "pending"
+  },
+  {
+    "category": "General",
+    "title": "接口签名生成测试",
+    "url": "https://apidoc.lingxing.com/#/docs/TestSign/signature",
+    "status": "pending"
+  },
+  {
+    "category": "General",
+    "title": "在线请求测试",
+    "url": "https://apidoc.lingxing.com/#/docs/TestRequest/TestRequest",
+    "status": "pending"
+  },
+  {
+    "category": "接入指引",
+    "title": "API信息的查询与配置",
+    "url": "https://apidoc.lingxing.com/#/docs/Guidance/AppID",
+    "status": "pending"
+  },
+  {
+    "category": "接入指引",
+    "title": "领星 API 接入指南",
+    "url": "https://apidoc.lingxing.com/#/docs/Guidance/newInstructions",
+    "status": "pending"
+  },
+  {
+    "category": "接入指引",
+    "title": "常见问题案例",
+    "url": "https://apidoc.lingxing.com/#/docs/Guidance/QA",
+    "status": "pending"
+  },
+  {
+    "category": "接入指引",
+    "title": "全局错误码说明",
+    "url": "https://apidoc.lingxing.com/#/docs/Guidance/ErrorCode",
+    "status": "pending"
+  },
+  {
+    "category": "常见场景",
+    "title": "库存双向同步",
+    "url": "https://apidoc.lingxing.com/#/docs/Case/InventorySync",
+    "status": "pending"
+  },
+  {
+    "category": "常见场景",
+    "title": "STA货件流程说明",
+    "url": "https://apidoc.lingxing.com/#/docs/Case/staProcessNew",
+    "status": "pending"
+  },
+  {
+    "category": "授权",
+    "title": "获取接口令牌-access\\_token",
+    "url": "https://apidoc.lingxing.com/#/docs/Authorization/GetToken",
+    "status": "pending"
+  },
+  {
+    "category": "授权",
+    "title": "续约接口令牌",
+    "url": "https://apidoc.lingxing.com/#/docs/Authorization/RefreshToken",
+    "status": "pending"
+  },
+  {
+    "category": "基础数据",
+    "title": "查询亚马逊市场列表",
+    "url": "https://apidoc.lingxing.com/#/docs/BasicData/AllMarketplace",
+    "status": "pending"
+  },
+  {
+    "category": "基础数据",
+    "title": "查询亚马逊国家下地区列表",
+    "url": "https://apidoc.lingxing.com/#/docs/BasicData/WorldStateLists",
+    "status": "pending"
+  },
+  {
+    "category": "基础数据",
+    "title": "查询亚马逊店铺列表",
+    "url": "https://apidoc.lingxing.com/#/docs/BasicData/SellerLists",
+    "status": "pending"
+  },
+  {
+    "category": "基础数据",
+    "title": "查询亚马逊概念店铺列表",
+    "url": "https://apidoc.lingxing.com/#/docs/BasicData/ConceptSellerLists",
+    "status": "pending"
+  },
+  {
+    "category": "基础数据",
+    "title": "批量修改店铺名称",
+    "url": "https://apidoc.lingxing.com/#/docs/BasicData/SellerBatchRename",
+    "status": "pending"
+  },
+  {
+    "category": "基础数据",
+    "title": "查询ERP用户信息列表",
+    "url": "https://apidoc.lingxing.com/#/docs/BasicData/AccoutLists",
+    "status": "pending"
+  },
+  {
+    "category": "基础数据",
+    "title": "查询汇率",
+    "url": "https://apidoc.lingxing.com/#/docs/BasicData/Currency",
+    "status": "pending"
+  },
+  {
+    "category": "基础数据",
+    "title": "修改我的汇率",
+    "url": "https://apidoc.lingxing.com/#/docs/BasicData/ExchangeRateUpdate",
+    "status": "pending"
+  },
+  {
+    "category": "基础数据",
+    "title": "下载附件",
+    "url": "https://apidoc.lingxing.com/#/docs/BasicData/AttachmentDownload",
+    "status": "pending"
+  },
+  {
+    "category": "基础数据",
+    "title": "下载定制化附件",
+    "url": "https://apidoc.lingxing.com/#/docs/BasicData/CustomAttachmentDownload",
+    "status": "pending"
+  },
+  {
+    "category": "基础数据",
+    "title": "获取国家下的州、省编码",
+    "url": "https://apidoc.lingxing.com/#/docs/BasicData/StateList",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / Listing",
+    "title": "查询亚马逊Listing",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/Listing",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / Listing",
+    "title": "批量分配Listing负责人",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/UpdatePrincipal",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / Listing",
+    "title": "批量添加/编辑Listing配对",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/Productlink",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / Listing",
+    "title": "批量修改Listing价格",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/pricingSubmit",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / Listing",
+    "title": "批量获取Listing费用",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/GetPrices",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / Listing",
+    "title": "查询Listing标记标签列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/queryListingRelationTagList",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / Listing",
+    "title": "查询Listing标签列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/globalTagPageList",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / Listing",
+    "title": "添加Listing标签",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/globalTagAddTag",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / Listing",
+    "title": "删除Listing标签",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/globalTagRemoveTag",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / Listing",
+    "title": "FBA费差异-异常订单-订单",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/fbaFeeDifferenceList",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / Listing",
+    "title": "FBA费差异-异常订单-MSKU",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/fbaFeeDifferenceMskuList",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / Listing",
+    "title": "查询Listing操作日志列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/listingOperateLogPageList",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / Listing",
+    "title": "修改B2B价格",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/b2bPriceModifyPrice",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / Listing",
+    "title": "Listing新增商品标签",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/AddGoodsTag",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / Listing",
+    "title": "Listing删除商品标签",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/DeleteGoodsTag",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / Listing",
+    "title": "修改FBM库存&处理时间",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/UpdateFbmInventory",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / Listing",
+    "title": "解除Listing配对",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/UnlinkListing",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / Listing",
+    "title": "查询调价队列",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/adjustPriceAdjustPriceManual",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / 刊登管理",
+    "title": "刊登流程说明",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/PublishHelper",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / 刊登管理",
+    "title": "查询 Amazon 根分类",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/PublishManageCategoryRoot",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / 刊登管理",
+    "title": "查询 Amazon 子分类",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/PublishManageCategoryChildren",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / 刊登管理",
+    "title": "获取指定 productType 的 JSON Schema",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/PublishManageGetProductType",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / 刊登管理",
+    "title": "获取运费模板",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/GetMerchantShippingGroup",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / 刊登管理",
+    "title": "提交商品资料",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/ProductPublish",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / 刊登管理",
+    "title": "查询刊登结果",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/ProductList",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / 平台订单",
+    "title": "查询亚马逊订单列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/Orderlists",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / 平台订单",
+    "title": "查询亚马逊订单详情",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/OrderDetail",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / 平台订单",
+    "title": "更新订单备注",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/ScOrderSetRemark",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / 平台订单",
+    "title": "查询亚马逊多渠道订单列表v2",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/MCFOrderList",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / 平台订单",
+    "title": "查询亚马逊多渠道订单详情-商品信息",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/ProductInformation",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / 平台订单",
+    "title": "查询亚马逊多渠道订单详情-物流信息",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/LogisticsInformation",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / 平台订单",
+    "title": "查询亚马逊多渠道订单详情-退货换货信息",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/ReturnInfomation",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / 平台订单",
+    "title": "创建亚马逊多渠道订单",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/FbaCreateOrder",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / 平台订单",
+    "title": "查询售后订单列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/afterSaleList",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / 平台订单",
+    "title": "取消多渠道订单",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/cancelOrder",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / 平台订单",
+    "title": "查询多渠道订单-交易明细",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/MutilChannelTransactionDetail",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / 自发货管理",
+    "title": "查询亚马逊自发货订单列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/FBMOrderList",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / 自发货管理",
+    "title": "查询亚马逊自发货订单详情",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/FBMOrderDetail",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / 自发货管理",
+    "title": "亚马逊订单提交标发",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/SubmitFulfillment",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / 自发货管理",
+    "title": "查询亚马逊标发结果",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/GetFulfillmentResult",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / 自发货管理",
+    "title": "导入面单",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/UploadTracking",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / 促销管理",
+    "title": "查询促销活动列表-优惠券",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/promotionalActivitiesCouponList",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / 促销管理",
+    "title": "查询促销活动列表-秒杀",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/promotionalActivitiesSecKillList",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / 促销管理",
+    "title": "查询促销活动列表-管理促销",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/promotionalActivitiesManageList",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / 促销管理",
+    "title": "查询促销活动列表-会员折扣",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/promotionalActivitiesVipDiscountList",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / 促销管理",
+    "title": "查询优惠券详情+listing+订单(批量)",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/promotionCouponAllDetailBatch",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / 促销管理",
+    "title": "查询管理促销详情+listing+订单(批量)",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/promotionManagementAllDetailBatch",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / 促销管理",
+    "title": "查询会员折扣or价格折扣详情+listing+订单(批量)",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/promotionPrimeDiscountAllDetailBatch",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / 促销管理",
+    "title": "查询秒杀详情+listing+订单(批量)",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/promotionSecKillAllDetailBatch",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / 促销管理",
+    "title": "查询商品折扣列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/promotionListingList",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / 促销管理",
+    "title": "查询商品折扣详情-列表-优惠卷",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/promotionListingDetailCoupon",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / 促销管理",
+    "title": "查询商品折扣详情-列表-管理促销",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/promotionListingDetailManage",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / 促销管理",
+    "title": "查询商品折扣详情-列表-会员折扣",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/promotionListingDetailPrimeDiscount",
+    "status": "pending"
+  },
+  {
+    "category": "销售 / 促销管理",
+    "title": "查询商品折扣详情-列表-秒杀",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/promotionListingDetailSecKill",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / 发货计划",
+    "title": "查询FBA发货计划",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/ShipmentPlanLists",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / 发货计划",
+    "title": "创建FBA发货计划",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/CreateShipmentPlan",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / 发货计划",
+    "title": "编辑FBA发货计划",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/UpdatePlanLists",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / 发货单",
+    "title": "查询FBA发货单列表",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/GetInboundShipmentList",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / 发货单",
+    "title": "查询FBA发货单详情",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/getInboundShipmentListMwsDetail",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / 发货单",
+    "title": "批量查询FBA发货单详情",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/GetInboundShipmentListMwsDetailList",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / 发货单",
+    "title": "生成待发货的发货单",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/createReadySendOrder",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / 发货单",
+    "title": "生成已发货的发货单",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/CreateSendedOrder",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / 发货单",
+    "title": "发货单创建接口结果查询",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/searchProcessResult",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / 发货单",
+    "title": "发货单分配库存",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/ShipmentLockStock",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / 发货单",
+    "title": "发货单释放库存",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/outboundOrderReleaseStock",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / 发货单",
+    "title": "FBA发货单发货",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/SendGoods",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / 发货单",
+    "title": "编辑发货单",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/updateInboundShipmentListMws",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / 发货单",
+    "title": "删除发货单",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/DeleteFbaShipmentList",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / 发货单",
+    "title": "作废发货单",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/InvalidShipmentSn",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / 发货单",
+    "title": "更新发货单物流信息",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/updateListLogistics",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / 发货单",
+    "title": "更新发货单自定义成本",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/UpdateCustomCost",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / 发货单",
+    "title": "获取发货单头程物流-承运商信息",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/GetSeaTrackSupplierCarriers",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / 发货单",
+    "title": "获取发货单头程物流-其他费类型",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/GetHeadLogisticsFeeTypes",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / FBA货件（STA）",
+    "title": "创建STA任务",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/CreateSTATask",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / FBA货件（STA）",
+    "title": "查询包装组",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/ListPackingGroupItems",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / FBA货件（STA）",
+    "title": "保存装箱信息",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/SavePackingInfomation",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / FBA货件（STA）",
+    "title": "提交装箱信息",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/SubPackingInformation",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / FBA货件（STA）",
+    "title": "生成货件方案",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/GenerateShipmentPlan",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / FBA货件（STA）",
+    "title": "查询货件方案",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/ShipmentPreView",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / FBA货件（STA）",
+    "title": "查询货件方案的装箱信息",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/getInboundPackingBoxInfo",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / FBA货件（STA）",
+    "title": "确认货件方案",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/ConfirmShipmentPlan",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / FBA货件（STA）",
+    "title": "生成承运方式",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/GenerateTransportList",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / FBA货件（STA）",
+    "title": "生成可选送达时间",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/GenerateDeliveryDateList",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / FBA货件（STA）",
+    "title": "查询承运方式",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/GetTransportList",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / FBA货件（STA）",
+    "title": "查询可选送达时间",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/GetDeliveryDateList",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / FBA货件（STA）",
+    "title": "提交送达时间",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/SubDeliveryTime",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / FBA货件（STA）",
+    "title": "提交货件配送服务",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/SubShipmentDistributionService",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / FBA货件（STA）",
+    "title": "上传货件跟踪号",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/UploadShipmentTrackingNumber",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / FBA货件（STA）",
+    "title": "修改货件装箱信息",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/UpdateShipmentPacking",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / FBA货件（STA）",
+    "title": "修改货件实际状态",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/UpdateShipmentActualStatus",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / FBA货件（STA）",
+    "title": "上传货件跟踪号",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/UpdateShipmentTrack",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / FBA货件（STA）",
+    "title": "取消STA任务",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/CancelSTATask",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / FBA货件（STA）",
+    "title": "查询异步任务状态",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/Operate",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / FBA货件（STA）",
+    "title": "获取商品预处理信息",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/GetPrepareDetails",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / FBA货件（STA）",
+    "title": "同步STA任务到ERP",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/SynchronizeSTATask",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / FBA货件（STA）",
+    "title": "同步亚马逊货件到ERP",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/SyncShipment",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / FBA货件（STA）",
+    "title": "查询FBA货件箱子、卡板标签",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/printFbaLabels",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / FBA货件（STA）",
+    "title": "查询FBA货件商品FNSKU标签",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/printFnskuLabels",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / FBA货件（STA）",
+    "title": "查询STA任务列表",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/QuerySTATaskList",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / FBA货件（STA）",
+    "title": "查询STA任务详情",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/StaTaskDetail",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / FBA货件（STA）",
+    "title": "查询STA任务包装组装箱信息",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/QuerySTATaskBoxInformation",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / FBA货件（STA）",
+    "title": "查询货件列表",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/FBAShipmentList",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / FBA货件（STA）",
+    "title": "查询货件详情",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/ShipmentDetailList",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / FBA货件（STA）",
+    "title": "查询货件装箱信息（旧）",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/BoxInfo",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / FBA货件（STA）",
+    "title": "查询FBA商品信息列表（旧）",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/GetFbaProductList",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / FBA货件（STA）",
+    "title": "查询货件装箱信息",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/ListShipmentBoxes",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / FBA货件（STA）",
+    "title": "查询FBA到货接收明细",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/FBAReceivedInventory",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / FBA货件（STA）",
+    "title": "地址簿-发货地址列表",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/ShipFromAddressList",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / FBA货件（STA）",
+    "title": "地址簿-发货地址创建",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/CreateShipFromAddress",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / FBA货件（STA）",
+    "title": "地址簿-发货地址修改",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/UpdateShipFromAddress",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / FBA货件（STA）",
+    "title": "地址簿-配送地址详情",
+    "url": "https://apidoc.lingxing.com/#/docs/FBA/ShoppingAddress",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / FBA货件（STA）",
+    "title": "取消AWD入库任务",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/awdInboundPlanCancel",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / FBA货件（STA）",
+    "title": "确认AWD入库任务",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/awdInboundPlanConfirmInboundPlan",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / FBA货件（STA）",
+    "title": "创建AWD入库任务",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/awdInboundPlanCreatePlan",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / FBA货件（STA）",
+    "title": "查询AWD入库任务详情",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/awdInboundPlanDetail",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / FBA货件（STA）",
+    "title": "查询AWD入库任务列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/awdInboundPlanPage",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / FBA货件（STA）",
+    "title": "更新AWD入库任务",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/awdInboundPlanUpdateInboundPlan",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / FBA货件（STA）",
+    "title": "查询AWD入库货件详情",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/awdInboundShipmentDetail",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / FBA货件（STA）",
+    "title": "查询AWD入库货件列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/awdInboundShipmentPage",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / FBA货件（STA）",
+    "title": "更新AWD货件跟踪编号",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/awdInboundShipmentUpdateShipmentInfo",
+    "status": "pending"
+  },
+  {
+    "category": "FBA / FBA货件（STA）",
+    "title": "打印AWD入库货件箱子标签",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/awdInboundShipmentUploadPacking",
+    "status": "pending"
+  },
+  {
+    "category": "补货建议",
+    "title": "查询补货列表",
+    "url": "https://apidoc.lingxing.com/#/docs/FBASug/GetSummaryList",
+    "status": "pending"
+  },
+  {
+    "category": "补货建议",
+    "title": "查询规则-ASIN",
+    "url": "https://apidoc.lingxing.com/#/docs/FBASug/ConfigASIN",
+    "status": "pending"
+  },
+  {
+    "category": "补货建议",
+    "title": "查询规则-MSKU",
+    "url": "https://apidoc.lingxing.com/#/docs/FBASug/ConfigMSKU",
+    "status": "pending"
+  },
+  {
+    "category": "补货建议",
+    "title": "查询建议信息-ASIN",
+    "url": "https://apidoc.lingxing.com/#/docs/FBASug/InfoASIN",
+    "status": "pending"
+  },
+  {
+    "category": "补货建议",
+    "title": "查询建议信息-MSKU",
+    "url": "https://apidoc.lingxing.com/#/docs/FBASug/InfoMSKU",
+    "status": "pending"
+  },
+  {
+    "category": "补货建议",
+    "title": "单个设置规则-ASIN",
+    "url": "https://apidoc.lingxing.com/#/docs/FBASug/SetConfigASIN",
+    "status": "pending"
+  },
+  {
+    "category": "补货建议",
+    "title": "单个设置规则-MSKU",
+    "url": "https://apidoc.lingxing.com/#/docs/FBASug/SetConfigMSKU",
+    "status": "pending"
+  },
+  {
+    "category": "补货建议",
+    "title": "批量设置规则-ASIN",
+    "url": "https://apidoc.lingxing.com/#/docs/FBASug/SetConfigsASIN",
+    "status": "pending"
+  },
+  {
+    "category": "补货建议",
+    "title": "批量设置规则-MSKU",
+    "url": "https://apidoc.lingxing.com/#/docs/FBASug/SetConfigsMSKU",
+    "status": "pending"
+  },
+  {
+    "category": "补货建议",
+    "title": "查询报表型数据明细-ASIN",
+    "url": "https://apidoc.lingxing.com/#/docs/FBASug/SourceListASIN",
+    "status": "pending"
+  },
+  {
+    "category": "补货建议",
+    "title": "查询报表型数据明细-MSKU",
+    "url": "https://apidoc.lingxing.com/#/docs/FBASug/SourceListMSKU",
+    "status": "pending"
+  },
+  {
+    "category": "补货建议",
+    "title": "查询未来销量预测和库存预测-ASIN",
+    "url": "https://apidoc.lingxing.com/#/docs/FBASug/DailySalesInfoFeatureASIN",
+    "status": "pending"
+  },
+  {
+    "category": "补货建议",
+    "title": "查询未来销量预测和库存预测-MSKU",
+    "url": "https://apidoc.lingxing.com/#/docs/FBASug/DailySalesInfoFeatureMSKU",
+    "status": "pending"
+  },
+  {
+    "category": "补货限制",
+    "title": "查询IPI信息",
+    "url": "https://apidoc.lingxing.com/#/docs/FBALimit/GetIpiInfo",
+    "status": "pending"
+  },
+  {
+    "category": "补货限制",
+    "title": "查询补货限制列表",
+    "url": "https://apidoc.lingxing.com/#/docs/FBALimit/replenishmentRestrictionList",
+    "status": "pending"
+  },
+  {
+    "category": "产品",
+    "title": "创建UPC编码",
+    "url": "https://apidoc.lingxing.com/#/docs/Product/AddCommodityCode",
+    "status": "pending"
+  },
+  {
+    "category": "产品",
+    "title": "查询UPC编码列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Product/UpcList",
+    "status": "pending"
+  },
+  {
+    "category": "产品",
+    "title": "查询本地产品列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Product/ProductLists",
+    "status": "pending"
+  },
+  {
+    "category": "产品",
+    "title": "查询本地产品详情",
+    "url": "https://apidoc.lingxing.com/#/docs/Product/ProductDetails",
+    "status": "pending"
+  },
+  {
+    "category": "产品",
+    "title": "批量查询本地产品详情",
+    "url": "https://apidoc.lingxing.com/#/docs/Product/batchGetProductInfo",
+    "status": "pending"
+  },
+  {
+    "category": "产品",
+    "title": "产品启用、禁用",
+    "url": "https://apidoc.lingxing.com/#/docs/Product/productOperateBatch",
+    "status": "pending"
+  },
+  {
+    "category": "产品",
+    "title": "添加/编辑本地产品",
+    "url": "https://apidoc.lingxing.com/#/docs/Product/SetProduct",
+    "status": "pending"
+  },
+  {
+    "category": "产品",
+    "title": "查询产品属性列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Product/attributeList",
+    "status": "pending"
+  },
+  {
+    "category": "产品",
+    "title": "添加/编辑产品属性",
+    "url": "https://apidoc.lingxing.com/#/docs/Product/attributeSet",
+    "status": "pending"
+  },
+  {
+    "category": "产品",
+    "title": "查询多属性产品列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Product/spuList",
+    "status": "pending"
+  },
+  {
+    "category": "产品",
+    "title": "查询多属性产品详情",
+    "url": "https://apidoc.lingxing.com/#/docs/Product/spuInfo",
+    "status": "pending"
+  },
+  {
+    "category": "产品",
+    "title": "添加/编辑多属性产品",
+    "url": "https://apidoc.lingxing.com/#/docs/Product/spuSet",
+    "status": "pending"
+  },
+  {
+    "category": "产品",
+    "title": "查询捆绑产品关系列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Product/bundledProductList",
+    "status": "pending"
+  },
+  {
+    "category": "产品",
+    "title": "添加/编辑捆绑产品",
+    "url": "https://apidoc.lingxing.com/#/docs/Product/SetBundled",
+    "status": "pending"
+  },
+  {
+    "category": "产品",
+    "title": "查询产品辅料列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Product/productAuxList",
+    "status": "pending"
+  },
+  {
+    "category": "产品",
+    "title": "添加/编辑辅料",
+    "url": "https://apidoc.lingxing.com/#/docs/Product/setAux",
+    "status": "pending"
+  },
+  {
+    "category": "产品",
+    "title": "查询产品品牌列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Product/Brand",
+    "status": "pending"
+  },
+  {
+    "category": "产品",
+    "title": "添加/编辑产品品牌",
+    "url": "https://apidoc.lingxing.com/#/docs/Product/SetBrand",
+    "status": "pending"
+  },
+  {
+    "category": "产品",
+    "title": "查询产品分类列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Product/Category",
+    "status": "pending"
+  },
+  {
+    "category": "产品",
+    "title": "添加/编辑产品分类",
+    "url": "https://apidoc.lingxing.com/#/docs/Product/SetCategory",
+    "status": "pending"
+  },
+  {
+    "category": "产品",
+    "title": "上传本地产品图片",
+    "url": "https://apidoc.lingxing.com/#/docs/Product/UploadPictures",
+    "status": "pending"
+  },
+  {
+    "category": "产品",
+    "title": "查询产品标签",
+    "url": "https://apidoc.lingxing.com/#/docs/Product/GetProductTag",
+    "status": "pending"
+  },
+  {
+    "category": "产品",
+    "title": "创建产品标签",
+    "url": "https://apidoc.lingxing.com/#/docs/Product/CreateProductTag",
+    "status": "pending"
+  },
+  {
+    "category": "产品",
+    "title": "标记产品标签",
+    "url": "https://apidoc.lingxing.com/#/docs/Product/SetProductTag",
+    "status": "pending"
+  },
+  {
+    "category": "产品",
+    "title": "删除产品标签",
+    "url": "https://apidoc.lingxing.com/#/docs/Product/DelProductTag",
+    "status": "pending"
+  },
+  {
+    "category": "产品",
+    "title": "查询操作日志",
+    "url": "https://apidoc.lingxing.com/#/docs/Product/GetPagingLogLists",
+    "status": "pending"
+  },
+  {
+    "category": "产品",
+    "title": "查询透明计划商品列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Product/getTransparencyProductList",
+    "status": "pending"
+  },
+  {
+    "category": "采购",
+    "title": "查询供应商列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Purchase/Supplier",
+    "status": "pending"
+  },
+  {
+    "category": "采购",
+    "title": "添加/修改供应商",
+    "url": "https://apidoc.lingxing.com/#/docs/Purchase/SupplierEdit",
+    "status": "pending"
+  },
+  {
+    "category": "采购",
+    "title": "查询采购方列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Purchase/purchaserLists",
+    "status": "pending"
+  },
+  {
+    "category": "采购",
+    "title": "查询采购计划列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Purchase/getPurchasePlans",
+    "status": "pending"
+  },
+  {
+    "category": "采购",
+    "title": "创建待采购的采购计划",
+    "url": "https://apidoc.lingxing.com/#/docs/Purchase/createPurchasePlan",
+    "status": "pending"
+  },
+  {
+    "category": "采购",
+    "title": "查询采购单列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Purchase/PurchaseOrderList",
+    "status": "pending"
+  },
+  {
+    "category": "采购",
+    "title": "采购单下单",
+    "url": "https://apidoc.lingxing.com/#/docs/Purchase/SetOrders",
+    "status": "pending"
+  },
+  {
+    "category": "采购",
+    "title": "作废采购单",
+    "url": "https://apidoc.lingxing.com/#/docs/Purchase/Cancel",
+    "status": "pending"
+  },
+  {
+    "category": "采购",
+    "title": "创建待到货的采购单",
+    "url": "https://apidoc.lingxing.com/#/docs/Purchase/CreatePurchaseOrder",
+    "status": "pending"
+  },
+  {
+    "category": "采购",
+    "title": "查询采购退货单列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Purchase/getPurchaseReturnOrderList",
+    "status": "pending"
+  },
+  {
+    "category": "采购",
+    "title": "创建已完成的采购退货单",
+    "url": "https://apidoc.lingxing.com/#/docs/Purchase/createPurchaseReturnOrder",
+    "status": "pending"
+  },
+  {
+    "category": "采购",
+    "title": "作废采购/委外退货单",
+    "url": "https://apidoc.lingxing.com/#/docs/Purchase/CancelPurchaseReturnOrder",
+    "status": "pending"
+  },
+  {
+    "category": "采购",
+    "title": "查询采购变更单列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Purchase/changeOrderList",
+    "status": "pending"
+  },
+  {
+    "category": "采购",
+    "title": "创建已完成的采购变更单",
+    "url": "https://apidoc.lingxing.com/#/docs/Purchase/createPurchaseChangeOrder",
+    "status": "pending"
+  },
+  {
+    "category": "采购",
+    "title": "查询委外订单列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Purchase/getOrders",
+    "status": "pending"
+  },
+  {
+    "category": "采购",
+    "title": "添加采购单物流信息",
+    "url": "https://apidoc.lingxing.com/#/docs/Purchase/addLogistics",
+    "status": "pending"
+  },
+  {
+    "category": "采购",
+    "title": "作废采购计划",
+    "url": "https://apidoc.lingxing.com/#/docs/Purchase/PurchasePlanCancel",
+    "status": "pending"
+  },
+  {
+    "category": "采购",
+    "title": "编辑采购单备注",
+    "url": "https://apidoc.lingxing.com/#/docs/Purchase/OrderModifyRemark",
+    "status": "pending"
+  },
+  {
+    "category": "采购",
+    "title": "采购单整单结束到货",
+    "url": "https://apidoc.lingxing.com/#/docs/Purchase/setOrderFinish",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 仓库设置",
+    "title": "查询仓库列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/WarehouseLists",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 仓库设置",
+    "title": "添加/修改仓库",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/EditWarehouse",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 仓库设置",
+    "title": "查询本地仓位列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/warehouseBin",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 仓库设置",
+    "title": "添加仓位",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/binCreate",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 仓库设置",
+    "title": "启用、禁用仓位",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/switchStatus",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 仓库设置",
+    "title": "海外仓sku配对",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/OverseaWarehouseProductMatch",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 仓库设置",
+    "title": "海外sku取消配对",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/OverseaWarehouseProductUnMatch",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 仓库设置",
+    "title": "查询产品仓位列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/getEntryRecommendBinList",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 库存&流水",
+    "title": "查询FBA库存列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/FBAStock",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 库存&流水",
+    "title": "查询FBA库存列表v2",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/FBAStock_v2",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 库存&流水",
+    "title": "查询AWD库存列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/AwdWarehouseDetail",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 库存&流水",
+    "title": "查询仓库库存明细",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/InventoryDetails",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 库存&流水",
+    "title": "查询仓位库存明细",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/inventoryBinDetails",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 库存&流水",
+    "title": "查询批次明细",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/GetBatchDetailList",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 库存&流水",
+    "title": "查询批次流水",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/GetBatchStatementList",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 库存&流水",
+    "title": "查询库存流水（旧）",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/WarehouseStatement",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 库存&流水",
+    "title": "查询库存流水（新）",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/WarehouseStatementNew",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 库存&流水",
+    "title": "查询仓位流水",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/wareHouseBinStatement",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 收货质检",
+    "title": "查询收货单列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/PurchaseReceiptOrderList",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 收货质检",
+    "title": "创建待收货的收货单",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/createReceiptOrder",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 收货质检",
+    "title": "收货单到货",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/Receive",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 收货质检",
+    "title": "收货单快捷入库",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/FastReceive",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 收货质检",
+    "title": "查询销售退货单列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/ReturnList",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 收货质检",
+    "title": "查询质检单列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/ReceiptOrderQcList",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 收货质检",
+    "title": "查询质检单详情",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/qualityInspectionOrderDetail",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 收货质检",
+    "title": "待收货退货单快捷入库",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/returnOrderFastStorageIn",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 收货质检",
+    "title": "订单退款",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/RefundOrder",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 出入库",
+    "title": "添加入库单",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/OrderAdd",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 出入库",
+    "title": "查询入库单列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/inboundgetOrders",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 出入库",
+    "title": "撤销入库单",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/SetInboundOrderRevoke",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 出入库",
+    "title": "添加出库单",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/OrderAddOut",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 出入库",
+    "title": "查询出库单列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/outboundgetOrders",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 出入库",
+    "title": "查询销售出库单详情",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/WmsOrderDetail",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 出入库",
+    "title": "撤销出库单",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/SetOutboundOrderRevoke",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 出入库",
+    "title": "创建加工单 / 拆分单",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/addStorageProcessOrder",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 出入库",
+    "title": "加工单列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/getProcessOrderLists",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 出入库",
+    "title": "查询调拨单列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/getStorageAllocationList",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 出入库",
+    "title": "创建待收货/已完成的调拨单",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/AddAllocationOrder",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 出入库",
+    "title": "调拨单全部收货",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/receiveAllocationOrder",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 出入库",
+    "title": "调拨单分批收货",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/partlyReceiveAllocationOrder",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 出入库",
+    "title": "调拨单结束到货",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/finishReceiveAllocationOrder",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 出入库",
+    "title": "删除调拨单",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/DeleteStorageAllocationList",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 出入库",
+    "title": "撤销调拨单",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/CancelStorageAllocationList",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 出入库",
+    "title": "查询调整单列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/getStorageAdjustOrderList",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 出入库",
+    "title": "创建已完成的数量调整单",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/addAdjustmentOrder",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 出入库",
+    "title": "创建已完成的换标调整单",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/addRebrandAdjustmentOrder",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 出入库",
+    "title": "创建已完成的SKU调整单",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/addSkuAdjustmentOrder",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 出入库",
+    "title": "查询盘点单列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/checkGetOrderList",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 出入库",
+    "title": "查询盘点单详情",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/checkGetOrderDetail",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 出入库",
+    "title": "创建已完成的盘点单",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/checkAddOrder",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 出入库",
+    "title": "获取自定义入库类型",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/inboundGetCustomTypes",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 出入库",
+    "title": "获取自定义出库类型",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/outboundGetCustomTypes",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 出入库",
+    "title": "创建待调拨的调拨单",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/submitAllocationOrder",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 出入库",
+    "title": "入库单确认入库",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/InboundOrderConfirm",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 出入库",
+    "title": "出库单确认出库",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/OutboundOrderConfirm",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 出入库",
+    "title": "调整单确认调整",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/AdjustOrderConfirm",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 出入库",
+    "title": "查询调整单确认调整结果",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/GetAdjustOrderConfirmResult",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 出入库",
+    "title": "删除出库单",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/outboundOrderDelete",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 出入库",
+    "title": "创建已完成的成本补录单",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/FinishCostChangeOrder",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 海外仓",
+    "title": "查询海外仓备货单列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/listInbound",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 海外仓",
+    "title": "查询海外仓备货单详情",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/OverSeasStockDetail",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 海外仓",
+    "title": "获取备货单号",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/listOrderNos",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 海外仓",
+    "title": "删除备货单",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/DeleteOverSeaStockOrder",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 海外仓",
+    "title": "更新备货单",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/updateInbound",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 海外仓",
+    "title": "更新备货单物流信息",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/UpdateLogistics",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 海外仓",
+    "title": "查询备货单装箱信息",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/getPackingData",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 海外仓",
+    "title": "上传备货单装箱信息",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/packing",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 海外仓",
+    "title": "查询备货单收货记录",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/GetReceiveGoodRecords",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 海外仓",
+    "title": "海外仓备货单发货",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/SendInbound",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 海外仓",
+    "title": "备货单分批收货",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/inboundBatchesReceipt",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 海外仓",
+    "title": "备货单结束到货",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/inboundCompleteReceipt",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 海外仓",
+    "title": "创建待发货/待收货/已完成的备货单",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/CreateInbound",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 海外仓",
+    "title": "查询系统产品与第三方海外仓产品映射列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/matchSkuList",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 海外仓",
+    "title": "查询海外仓sku配对列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/OverseaWarehouseMatchList",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 海外仓",
+    "title": "获取第三方SKU标签PDF文件",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/productLabel",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 海外仓",
+    "title": "获取第三方箱唛",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/packageLabel",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 海外仓",
+    "title": "查询移除入库单列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/removalInboundList",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 海外仓",
+    "title": "备货单分配库存",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/overseaStockOrderAllocate",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 发货",
+    "title": "查询销售出库单列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/WmsOrderList",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 发货",
+    "title": "物流下单 - 编辑运单号/跟踪号",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/setTrackingNo",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 发货",
+    "title": "查询销售出库单物流面单",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/wmsOrderGetWmsLogisticsLabels",
+    "status": "pending"
+  },
+  {
+    "category": "仓库 / 发货",
+    "title": "销售出库单截单",
+    "url": "https://apidoc.lingxing.com/#/docs/Warehouse/cancelWmsOrder",
+    "status": "pending"
+  },
+  {
+    "category": "物流",
+    "title": "查询头程物流渠道列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Logistics/ChannelList",
+    "status": "pending"
+  },
+  {
+    "category": "物流",
+    "title": "查询头程物流商列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Logistics/QueryHeadLogisticsProvider",
+    "status": "pending"
+  },
+  {
+    "category": "物流",
+    "title": "批量添加头程物流商",
+    "url": "https://apidoc.lingxing.com/#/docs/Logistics/AddProviders",
+    "status": "pending"
+  },
+  {
+    "category": "物流",
+    "title": "批量添加头程物流方式",
+    "url": "https://apidoc.lingxing.com/#/docs/Logistics/AddChannels",
+    "status": "pending"
+  },
+  {
+    "category": "物流",
+    "title": "查询已启用的自发货物流方式",
+    "url": "https://apidoc.lingxing.com/#/docs/Logistics/listUsedLogisticsType",
+    "status": "pending"
+  },
+  {
+    "category": "物流",
+    "title": "查询运输方式列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Logistics/transportMethodList",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 报告",
+    "title": "SP广告活动报表",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/report/spCampaignReports",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 报告",
+    "title": "SP广告位报告",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/report/campaignPlacementReports",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 报告",
+    "title": "SP广告组报表",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/report/spAdGroupReports",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 报告",
+    "title": "SP广告商品报表",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/report/spProductAdReports",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 报告",
+    "title": "SP关键词报表",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/report/spKeywordReports",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 报告",
+    "title": "SP商品定位报表",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/report/spTargetReports",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 报告",
+    "title": "SP已购买商品报表",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/report/asinReports",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 报告",
+    "title": "SP用户搜索词报表",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/report/queryWordReports",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 报告",
+    "title": "SB广告活动报表",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/report/hsaCampaignReports",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 报告",
+    "title": "SB广告活动-广告位报告",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/report/hsaCampaignPlacementReports",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 报告",
+    "title": "SB广告组报表",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/report/hsaAdGroupReports",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 报告",
+    "title": "SB广告的投放报告",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/report/listHsaTargetingReport",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 报告",
+    "title": "SB用户搜索词报表",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/report/hsaQueryWordReports",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 报告",
+    "title": "SB广告归因于广告的购买报告",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/report/hsaPurchasedAsinReports",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 报告",
+    "title": "SB广告创意报告",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/report/listHsaProductAdReport",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 报告",
+    "title": "SB关键词-广告位报告",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/report/listHsaKeywordPlacementReport",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 报告",
+    "title": "SD广告活动报表",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/report/sdCampaignReports",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 报告",
+    "title": "SD广告组报表",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/report/sdAdGroupReports",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 报告",
+    "title": "SD广告商品报表",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/report/sdProductAdReports",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 报告",
+    "title": "SD商品定位报表",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/report/sdTargetReports",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 报告",
+    "title": "SD已购买商品报表",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/report/sdAsinReports",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 报告",
+    "title": "SD匹配的目标报表",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/report/sdMatchTargetReports",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 报告",
+    "title": "SP广告活动小时数据",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/report/spCampaignHourData",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 报告",
+    "title": "SP广告位小时数据",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/report/spAdPlacementHourData",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 报告",
+    "title": "SP广告组小时数据",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/report/spAdGroupHourData",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 报告",
+    "title": "SP广告小时数据",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/report/spAdvertiseHourData",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 报告",
+    "title": "SP投放小时数据",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/report/spTargetHourData",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 报告",
+    "title": "SB广告活动小时数据",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/report/sbCampaignHourData",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 报告",
+    "title": "SB广告组小时数据",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/report/sbAdGroupHourData",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 报告",
+    "title": "SB投放小时数据",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/report/sbTargetHourData",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 报告",
+    "title": "SB广告位小时数据",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/report/sbAdPlacementHourData",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 报告",
+    "title": "SD广告活动小时数据",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/report/sdCampaignHourData",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 报告",
+    "title": "SD广告组小时数据",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/report/sdAdGroupHourData",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 报告",
+    "title": "SD广告小时数据",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/report/sdAdvertiseHourData",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 报告",
+    "title": "SD投放小时数据",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/report/sdTargetHourData",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 报告",
+    "title": "查询DSP报告列表-订单",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/report/dspReportOrderList",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 报告",
+    "title": "出单时段分析-产品",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/report/ProductAnalysisList",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 报告",
+    "title": "SB分摊",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/baseData/newadsbDivideAsinReports",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 基础数据",
+    "title": "广告组合",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/baseData/portfolios",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 基础数据",
+    "title": "SP广告活动",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/baseData/spCampaigns",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 基础数据",
+    "title": "SP广告组",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/baseData/spAdGroups",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 基础数据",
+    "title": "SP广告商品",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/baseData/spProductAds",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 基础数据",
+    "title": "SP关键词",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/baseData/spKeywords",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 基础数据",
+    "title": "SP商品定位",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/baseData/spTargets",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 基础数据",
+    "title": "SP否定投放",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/baseData/spNegativeTargetsOrKeywords",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 基础数据",
+    "title": "SB广告活动",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/baseData/hsaCampaigns",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 基础数据",
+    "title": "SB广告组",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/baseData/hsaAdGroups",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 基础数据",
+    "title": "SB广告的投放",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/baseData/sbTargeting",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 基础数据",
+    "title": "SB广告创意",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/baseData/sbAdHasProductAds",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 基础数据",
+    "title": "SB否定关键词",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/baseData/hsaNegativeKeywords",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 基础数据",
+    "title": "SB否定商品投放",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/baseData/hsaNegativeTargets",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 基础数据",
+    "title": "SD广告活动",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/baseData/sdCampaigns",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 基础数据",
+    "title": "SD广告组",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/baseData/sdAdGroups",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 基础数据",
+    "title": "SD广告商品",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/baseData/sdProductAds",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 基础数据",
+    "title": "SD商品定位",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/baseData/sdTargets",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 基础数据",
+    "title": "SD否定商品定位",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/baseData/sdNegativeTargets",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 基础数据",
+    "title": "查询广告账号列表",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/baseData/dspAccountList",
+    "status": "pending"
+  },
+  {
+    "category": "新广告 / 报表下载",
+    "title": "ABA搜索词报告-按周维度",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/reportDownload/abaReport",
+    "status": "pending"
+  },
+  {
+    "category": "新广告",
+    "title": "操作日志（新）",
+    "url": "https://apidoc.lingxing.com/#/docs/newAd/apiLogStandard",
+    "status": "pending"
+  },
+  {
+    "category": "财务",
+    "title": "查询费用类型列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Finance/feeManagementType",
+    "status": "pending"
+  },
+  {
+    "category": "财务",
+    "title": "查询费用明细列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Finance/feeManagementList",
+    "status": "pending"
+  },
+  {
+    "category": "财务",
+    "title": "创建费用单",
+    "url": "https://apidoc.lingxing.com/#/docs/Finance/feeManagementCreate",
+    "status": "pending"
+  },
+  {
+    "category": "财务",
+    "title": "编辑费用单",
+    "url": "https://apidoc.lingxing.com/#/docs/Finance/feeManagementEdit",
+    "status": "pending"
+  },
+  {
+    "category": "财务",
+    "title": "作废费用单",
+    "url": "https://apidoc.lingxing.com/#/docs/Finance/feeManagementDiscard",
+    "status": "pending"
+  },
+  {
+    "category": "财务",
+    "title": "删除费用单",
+    "url": "https://apidoc.lingxing.com/#/docs/Finance/feeManagementDelete",
+    "status": "pending"
+  },
+  {
+    "category": "财务",
+    "title": "查询利润报表-MSKU",
+    "url": "https://apidoc.lingxing.com/#/docs/Finance/bdMSKU",
+    "status": "pending"
+  },
+  {
+    "category": "财务",
+    "title": "查询利润报表-ASIN",
+    "url": "https://apidoc.lingxing.com/#/docs/Finance/bdASIN",
+    "status": "pending"
+  },
+  {
+    "category": "财务",
+    "title": "查询利润报表-父ASIN",
+    "url": "https://apidoc.lingxing.com/#/docs/Finance/bdParentASIN",
+    "status": "pending"
+  },
+  {
+    "category": "财务",
+    "title": "查询利润报表-SKU",
+    "url": "https://apidoc.lingxing.com/#/docs/Finance/bdSKU",
+    "status": "pending"
+  },
+  {
+    "category": "财务",
+    "title": "查询利润报表-店铺",
+    "url": "https://apidoc.lingxing.com/#/docs/Finance/bdSeller",
+    "status": "pending"
+  },
+  {
+    "category": "财务",
+    "title": "查询利润报表-店铺月度汇总",
+    "url": "https://apidoc.lingxing.com/#/docs/Finance/bdSellerSummary",
+    "status": "pending"
+  },
+  {
+    "category": "财务",
+    "title": "查询利润报表 - 订单维度transaction视图",
+    "url": "https://apidoc.lingxing.com/#/docs/Finance/profitReportOrderTranscationList",
+    "status": "pending"
+  },
+  {
+    "category": "财务",
+    "title": "查询利润报表-订单",
+    "url": "https://apidoc.lingxing.com/#/docs/Finance/bdOrder",
+    "status": "pending"
+  },
+  {
+    "category": "财务",
+    "title": "查询利润报表（旧）-MSKU",
+    "url": "https://apidoc.lingxing.com/#/docs/Finance/FianceProfitMsku",
+    "status": "pending"
+  },
+  {
+    "category": "财务",
+    "title": "查询利润报表（旧）-ASIN（父级）",
+    "url": "https://apidoc.lingxing.com/#/docs/Finance/profitAsin",
+    "status": "pending"
+  },
+  {
+    "category": "财务",
+    "title": "查询利润报表（旧）-ASIN（子级）",
+    "url": "https://apidoc.lingxing.com/#/docs/Finance/profitAsinSon",
+    "status": "pending"
+  },
+  {
+    "category": "财务",
+    "title": "查询利润报表（旧）-结算明细",
+    "url": "https://apidoc.lingxing.com/#/docs/Finance/profitSettlement",
+    "status": "pending"
+  },
+  {
+    "category": "财务",
+    "title": "查询结算中心-结算汇总",
+    "url": "https://apidoc.lingxing.com/#/docs/Finance/settlementSummaryList",
+    "status": "pending"
+  },
+  {
+    "category": "财务",
+    "title": "查询结算中心-交易明细",
+    "url": "https://apidoc.lingxing.com/#/docs/Finance/settlementTransactionList",
+    "status": "pending"
+  },
+  {
+    "category": "财务",
+    "title": "查询库存分类账detail数据",
+    "url": "https://apidoc.lingxing.com/#/docs/Finance/centerOdsDetailQuery",
+    "status": "pending"
+  },
+  {
+    "category": "财务",
+    "title": "查询库存分类账summary数据",
+    "url": "https://apidoc.lingxing.com/#/docs/Finance/summaryQuery",
+    "status": "pending"
+  },
+  {
+    "category": "财务",
+    "title": "查询发货结算报告",
+    "url": "https://apidoc.lingxing.com/#/docs/Finance/SettlementReport",
+    "status": "pending"
+  },
+  {
+    "category": "财务",
+    "title": "查询settlement下载URL",
+    "url": "https://apidoc.lingxing.com/#/docs/Finance/SettlementExportUrlGet",
+    "status": "pending"
+  },
+  {
+    "category": "财务",
+    "title": "查询FBA成本计价流水",
+    "url": "https://apidoc.lingxing.com/#/docs/Finance/CostStream",
+    "status": "pending"
+  },
+  {
+    "category": "财务",
+    "title": "查询广告发票列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Finance/InvoiceList",
+    "status": "pending"
+  },
+  {
+    "category": "财务",
+    "title": "查询广告发票活动列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Finance/InvoiceCampaignList",
+    "status": "pending"
+  },
+  {
+    "category": "财务",
+    "title": "查询广告发票基本信息",
+    "url": "https://apidoc.lingxing.com/#/docs/Finance/InvoiceDetail",
+    "status": "pending"
+  },
+  {
+    "category": "财务",
+    "title": "立即重算-利润报表数据",
+    "url": "https://apidoc.lingxing.com/#/docs/Finance/ComputeManual",
+    "status": "pending"
+  },
+  {
+    "category": "财务",
+    "title": "查询请款单列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Finance/RequestFundsOrderList",
+    "status": "pending"
+  },
+  {
+    "category": "财务",
+    "title": "查询请款池-货款现结",
+    "url": "https://apidoc.lingxing.com/#/docs/Finance/requestFundsPoolPurchaseList",
+    "status": "pending"
+  },
+  {
+    "category": "财务",
+    "title": "查询请款池-货款月结",
+    "url": "https://apidoc.lingxing.com/#/docs/Finance/requestFundsPoolInboundList",
+    "status": "pending"
+  },
+  {
+    "category": "财务",
+    "title": "查询请款池-货款预付款",
+    "url": "https://apidoc.lingxing.com/#/docs/Finance/requestFundsPoolPrepayList",
+    "status": "pending"
+  },
+  {
+    "category": "财务",
+    "title": "查询请款池-物流请款",
+    "url": "https://apidoc.lingxing.com/#/docs/Finance/requestFundsPoolLogisticsList",
+    "status": "pending"
+  },
+  {
+    "category": "财务",
+    "title": "查询请款池-其他应付款",
+    "url": "https://apidoc.lingxing.com/#/docs/Finance/requestFundsPoolCustomFeeList",
+    "status": "pending"
+  },
+  {
+    "category": "财务",
+    "title": "查询请款池-其他费用",
+    "url": "https://apidoc.lingxing.com/#/docs/Finance/requestFundsPoolOtherFeeList",
+    "status": "pending"
+  },
+  {
+    "category": "财务",
+    "title": "应收报告-列表查询",
+    "url": "https://apidoc.lingxing.com/#/docs/Finance/receivableReportList",
+    "status": "pending"
+  },
+  {
+    "category": "财务",
+    "title": "应收报告-详情-列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Finance/reportListDetail",
+    "status": "pending"
+  },
+  {
+    "category": "财务",
+    "title": "应收报告-详情-基础信息",
+    "url": "https://apidoc.lingxing.com/#/docs/Finance/reportListDetailInfo",
+    "status": "pending"
+  },
+  {
+    "category": "客服",
+    "title": "查询邮件列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Service/lists",
+    "status": "pending"
+  },
+  {
+    "category": "客服",
+    "title": "查询邮件详情",
+    "url": "https://apidoc.lingxing.com/#/docs/Service/detail",
+    "status": "pending"
+  },
+  {
+    "category": "客服",
+    "title": "查询评价管理-Review",
+    "url": "https://apidoc.lingxing.com/#/docs/Service/review",
+    "status": "pending"
+  },
+  {
+    "category": "客服",
+    "title": "查询评价管理-Review(新)",
+    "url": "https://apidoc.lingxing.com/#/docs/Service/reviewV2",
+    "status": "pending"
+  },
+  {
+    "category": "客服",
+    "title": "查询评价管理-1-3星Feedback列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Service/FeedbackListMws",
+    "status": "pending"
+  },
+  {
+    "category": "客服",
+    "title": "查询评价管理-4-5星Feedback列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Service/FeedbackList",
+    "status": "pending"
+  },
+  {
+    "category": "客服",
+    "title": "查询评价统计-Review列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Service/reviewLists",
+    "status": "pending"
+  },
+  {
+    "category": "客服",
+    "title": "查询评价统计-Review每日新增数",
+    "url": "https://apidoc.lingxing.com/#/docs/Service/reviewDetail",
+    "status": "pending"
+  },
+  {
+    "category": "客服",
+    "title": "查询评价统计-Feedback列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Service/feedbackLists",
+    "status": "pending"
+  },
+  {
+    "category": "客服",
+    "title": "查询评价统计-Feedback每日新增数",
+    "url": "https://apidoc.lingxing.com/#/docs/Service/feedbackDetail",
+    "status": "pending"
+  },
+  {
+    "category": "客服",
+    "title": "查询客户列表（旧）",
+    "url": "https://apidoc.lingxing.com/#/docs/Service/CustomerList",
+    "status": "pending"
+  },
+  {
+    "category": "客服",
+    "title": "查询售后工单列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Service/AfterSalesWorkOrderList",
+    "status": "pending"
+  },
+  {
+    "category": "客服",
+    "title": "查询店铺绩效列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Service/storePerformanceList",
+    "status": "pending"
+  },
+  {
+    "category": "客服",
+    "title": "查询店铺绩效详情",
+    "url": "https://apidoc.lingxing.com/#/docs/Service/PerformanceNoticeDetail",
+    "status": "pending"
+  },
+  {
+    "category": "客服",
+    "title": "查询买家之声列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Service/voiceOfBuyerList",
+    "status": "pending"
+  },
+  {
+    "category": "客服",
+    "title": "查询RMA管理",
+    "url": "https://apidoc.lingxing.com/#/docs/Service/customerServiceRmaManageList",
+    "status": "pending"
+  },
+  {
+    "category": "客服",
+    "title": "查询客户列表（新）",
+    "url": "https://apidoc.lingxing.com/#/docs/Service/customerServiceCrmcustomerIndex",
+    "status": "pending"
+  },
+  {
+    "category": "客服",
+    "title": "查询业绩通知列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Service/PerformanceNoticeList",
+    "status": "pending"
+  },
+  {
+    "category": "工具",
+    "title": "关键词列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Tools/GetKeywordList",
+    "status": "pending"
+  },
+  {
+    "category": "工具",
+    "title": "查询竞品监控列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Tools/CompetitiveMonitorList",
+    "status": "pending"
+  },
+  {
+    "category": "工具",
+    "title": "查询预警消息列表-商品",
+    "url": "https://apidoc.lingxing.com/#/docs/Tools/warningMessageGoodsList",
+    "status": "pending"
+  },
+  {
+    "category": "工具",
+    "title": "查询预警消息列表-库存",
+    "url": "https://apidoc.lingxing.com/#/docs/Tools/warningMessageInventoryList",
+    "status": "pending"
+  },
+  {
+    "category": "统计",
+    "title": "查询销量、订单量、销售额",
+    "url": "https://apidoc.lingxing.com/#/docs/Statistics/AsinDailyLists",
+    "status": "pending"
+  },
+  {
+    "category": "统计",
+    "title": "查询产品表现（旧）",
+    "url": "https://apidoc.lingxing.com/#/docs/Statistics/AsinList",
+    "status": "pending"
+  },
+  {
+    "category": "统计",
+    "title": "查询产品表现",
+    "url": "https://apidoc.lingxing.com/#/docs/Statistics/AsinListNew",
+    "status": "pending"
+  },
+  {
+    "category": "统计",
+    "title": "查询asin360小时数据",
+    "url": "https://apidoc.lingxing.com/#/docs/Statistics/performanceTrendByHour",
+    "status": "pending"
+  },
+  {
+    "category": "统计",
+    "title": "查询退款量（旧）",
+    "url": "https://apidoc.lingxing.com/#/docs/Statistics/MonthRefund",
+    "status": "pending"
+  },
+  {
+    "category": "统计",
+    "title": "查询利润统计（旧）-MSKU",
+    "url": "https://apidoc.lingxing.com/#/docs/Statistics/ProfitMsku",
+    "status": "pending"
+  },
+  {
+    "category": "统计",
+    "title": "查询利润统计-MSKU",
+    "url": "https://apidoc.lingxing.com/#/docs/Statistics/statisticsOpenMSKU",
+    "status": "pending"
+  },
+  {
+    "category": "统计",
+    "title": "查询利润统计-ASIN",
+    "url": "https://apidoc.lingxing.com/#/docs/Statistics/statisticsOpenASIN",
+    "status": "pending"
+  },
+  {
+    "category": "统计",
+    "title": "查询利润统计-父ASIN",
+    "url": "https://apidoc.lingxing.com/#/docs/Statistics/statisticsOpenParent",
+    "status": "pending"
+  },
+  {
+    "category": "统计",
+    "title": "查询利润统计-店铺",
+    "url": "https://apidoc.lingxing.com/#/docs/Statistics/statisticsOpenSeller",
+    "status": "pending"
+  },
+  {
+    "category": "统计",
+    "title": "查询FBA长期仓储费",
+    "url": "https://apidoc.lingxing.com/#/docs/Statistics/FBAStorageFeeLongTerm",
+    "status": "pending"
+  },
+  {
+    "category": "统计",
+    "title": "查询FBA月仓储费",
+    "url": "https://apidoc.lingxing.com/#/docs/Statistics/FBAStorageFeeMonth",
+    "status": "pending"
+  },
+  {
+    "category": "统计",
+    "title": "查询店铺汇总销量",
+    "url": "https://apidoc.lingxing.com/#/docs/Statistics/StoreSales",
+    "status": "pending"
+  },
+  {
+    "category": "统计",
+    "title": "查询订单利润-MSKU",
+    "url": "https://apidoc.lingxing.com/#/docs/Finance/OrderProfitListMSKU",
+    "status": "pending"
+  },
+  {
+    "category": "统计",
+    "title": "库存报表-本地仓-新报表-汇总",
+    "url": "https://apidoc.lingxing.com/#/docs/Statistics/LocalAggregateListNew",
+    "status": "pending"
+  },
+  {
+    "category": "统计",
+    "title": "库存报表-本地仓-新报表-明细",
+    "url": "https://apidoc.lingxing.com/#/docs/Statistics/LocalDetailListNew",
+    "status": "pending"
+  },
+  {
+    "category": "统计",
+    "title": "库存报表-本地仓-历史报表-汇总",
+    "url": "https://apidoc.lingxing.com/#/docs/Statistics/LocalAggregateList",
+    "status": "pending"
+  },
+  {
+    "category": "统计",
+    "title": "库存报表-本地仓-历史报表-明细",
+    "url": "https://apidoc.lingxing.com/#/docs/Statistics/LocalDetailList",
+    "status": "pending"
+  },
+  {
+    "category": "统计",
+    "title": "库存报表-海外仓-新报表-汇总",
+    "url": "https://apidoc.lingxing.com/#/docs/Statistics/OverseasAggregateListNew",
+    "status": "pending"
+  },
+  {
+    "category": "统计",
+    "title": "库存报表-海外仓-新报表-明细",
+    "url": "https://apidoc.lingxing.com/#/docs/Statistics/OverseasDetailListNew",
+    "status": "pending"
+  },
+  {
+    "category": "统计",
+    "title": "库存报表-海外仓-历史报表-汇总",
+    "url": "https://apidoc.lingxing.com/#/docs/Statistics/OverseasAggregateList",
+    "status": "pending"
+  },
+  {
+    "category": "统计",
+    "title": "库存报表-海外仓-历史报表-明细",
+    "url": "https://apidoc.lingxing.com/#/docs/Statistics/OverseasDetailList",
+    "status": "pending"
+  },
+  {
+    "category": "统计",
+    "title": "库存报表-FBA-新版-汇总",
+    "url": "https://apidoc.lingxing.com/#/docs/Statistics/FbaStockAggregateListNew",
+    "status": "pending"
+  },
+  {
+    "category": "统计",
+    "title": "库存报表-FBA-新版-明细",
+    "url": "https://apidoc.lingxing.com/#/docs/Statistics/FbaStockDetailListNew",
+    "status": "pending"
+  },
+  {
+    "category": "统计",
+    "title": "库存报表-FBA-历史报表-汇总-明细",
+    "url": "https://apidoc.lingxing.com/#/docs/Statistics/FbaStockReportList",
+    "status": "pending"
+  },
+  {
+    "category": "统计",
+    "title": "创建移除订单",
+    "url": "https://apidoc.lingxing.com/#/docs/Statistics/CreateRemovalOrder",
+    "status": "pending"
+  },
+  {
+    "category": "统计",
+    "title": "查询亚马逊赔偿报告列表",
+    "url": "https://apidoc.lingxing.com/#/docs/Statistics/ReimbursementList",
+    "status": "pending"
+  },
+  {
+    "category": "统计",
+    "title": "查询采购报表列表-产品",
+    "url": "https://apidoc.lingxing.com/#/docs/Statistics/PurchaseReportProductList",
+    "status": "pending"
+  },
+  {
+    "category": "统计",
+    "title": "查询采购报表列表-供应商",
+    "url": "https://apidoc.lingxing.com/#/docs/Statistics/PurchaseReportSupplierList",
+    "status": "pending"
+  },
+  {
+    "category": "统计",
+    "title": "查询采购报表列表-采购员",
+    "url": "https://apidoc.lingxing.com/#/docs/Statistics/PurchaseReportBuyerList",
+    "status": "pending"
+  },
+  {
+    "category": "统计",
+    "title": "查询运营日志",
+    "url": "https://apidoc.lingxing.com/#/docs/Statistics/operateLogList",
+    "status": "pending"
+  },
+  {
+    "category": "统计",
+    "title": "查询运营日志(新)",
+    "url": "https://apidoc.lingxing.com/#/docs/Statistics/operateLogV2List",
+    "status": "pending"
+  },
+  {
+    "category": "目标管理",
+    "title": "店铺维度-批量查询目标",
+    "url": "https://apidoc.lingxing.com/#/docs/TargetManage/StoreBatchSelect",
+    "status": "pending"
+  },
+  {
+    "category": "目标管理",
+    "title": "店铺维度-批量新增/更新目标",
+    "url": "https://apidoc.lingxing.com/#/docs/TargetManage/StoreBatchOperate",
+    "status": "pending"
+  },
+  {
+    "category": "目标管理",
+    "title": "店铺维度-批量删除目标",
+    "url": "https://apidoc.lingxing.com/#/docs/TargetManage/StoreBatchDelete",
+    "status": "pending"
+  },
+  {
+    "category": "目标管理",
+    "title": "组织维度-批量查询目标",
+    "url": "https://apidoc.lingxing.com/#/docs/TargetManage/UserBatchSelect",
+    "status": "pending"
+  },
+  {
+    "category": "目标管理",
+    "title": "组织维度-批量新增/更新目标",
+    "url": "https://apidoc.lingxing.com/#/docs/TargetManage/UserBatchOperate",
+    "status": "pending"
+  },
+  {
+    "category": "目标管理",
+    "title": "组织维度-批量删除目标",
+    "url": "https://apidoc.lingxing.com/#/docs/TargetManage/UserBatchDelete",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "查询多平台店铺信息",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/StoreInfoV2",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "查询订单管理订单列表",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/MultiPlatOrderV2",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "查询多平台配对列表",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/PairListV2",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "批量添加/编辑多平台配对关系",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/pairMultiPlatformV2",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "预发货",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/PreShipment",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "审核发货",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/BatchReview",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "创建订单",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/CreateOrdersV2",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "合并订单",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/MergeOrder",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "拆分订单",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/SplitOrder",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "标记订单不发货",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/CancelOrder",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "订单发货",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/selfShipmentOrderDeliveryGoods",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "订单称重",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/setOrderWeighed",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "编辑订单（新版）",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/EditOrderV2",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "编辑/更新自发货订单",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/UpdateOrderV2",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "更新订单客服备注",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/mpOrderUpdateV2",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "快速出库",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/FastOutboundV2",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "获取快速出库结果",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/GetFastOutboundResultV2",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "查询销量统计列表(将于04.30下线)",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/platformStatisticsSaleStatPageList",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "查询销量统计列表V2",
+    "url": "https://apidoc.lingxing.com/#/docs/Statistics/PlatformStatisticsSaleStatPageListV2",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "查询可用报告列表 - Walmart Payment",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/WalmartPaymentQueryReport",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "查询报告详情 - Walmart Payment",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/WalmartPaymentQueryPage",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "查询平台仓发货单列表",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/QueryShippingListPage",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "查询平台仓发货单列表v2",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/QueryShippingListV2",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "修改平台仓发货单备注",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/ModifyPlatformRemark",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "查询WFS货件列表",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/QueryWFSCargoPage",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "查询WFS库存列表",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/QueryWFSInventionPage",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "查询Temu库存",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/FbtStockSearch",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "查询Temu货件",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/TemuCargo",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "查询FULL库存",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/FullList",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "查询退件地址列表",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/addressReturnAddressList",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "查询WFS货件可添加商品列表",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/addCargoGoodsList",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "WFS货件暂存",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/multiplatformCargoStorage",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "删除暂存货件",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/DeleteCargoStorage",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "查询利润报表-MSKU(旧版，将于04.30下线)",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/profitReportPageListMsku",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "查询利润报表-SKU(旧版，将于04.30下线)",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/profitReportPageListSku",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "查询利润报表-店铺(旧版，将于04.30下线)",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/profitReportPageListStore",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "查询利润报表-订单(旧版，将于04.30下线)",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/profitReportPageListOrder",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "查询结算利润（利润报表）-msku",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/profitReportMsku",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "查询结算利润（利润报表）-sku",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/profitReportSku",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "查询结算利润（利润报表）-店铺",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/profitReportSeller",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "查询结算利润（利润报表）-订单",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/profitReportOrder",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "查询Shopify在线商品-子体数据",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/ShopifyVariantList",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "查询Shein在线商品",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/SheinList",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "查询TikTok在线商品",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/TikTokList",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "查询Temu在线商品",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/TemuList",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "查询Line在线商品",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/LineList",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "查询eBay在线商品列表",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/eBayList",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "查询Walmart在线商品列表",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/walmartList",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "查询AliExpress在线商品列表 - 自运营",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/aliexpressList",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "查询AliExpress在线商品列表 - 托管模式",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/AliexpressListV2",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "批量TEMU地址解密",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/BatchTemuAddressDecrypt",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "平台仓发货单分配库存",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/shippingOrderAllocate",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "平台仓发货单拣货",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/shippingOrderPicking",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "平台仓发货单发货",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/shippingOrderDelivery",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "查询Walmart Review列表",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/WalmartCommentList",
+    "status": "pending"
+  },
+  {
+    "category": "多平台",
+    "title": "查询平台订单列表",
+    "url": "https://apidoc.lingxing.com/#/docs/MultiPlatform/V2/newPlatformOrderList",
+    "status": "pending"
+  },
+  {
+    "category": "VC",
+    "title": "查询VC店铺列表",
+    "url": "https://apidoc.lingxing.com/#/docs/VC/platformAuthVcSellerPageList",
+    "status": "pending"
+  },
+  {
+    "category": "VC",
+    "title": "查询VC-Listing列表",
+    "url": "https://apidoc.lingxing.com/#/docs/VC/listingManageVcListingPageList",
+    "status": "pending"
+  },
+  {
+    "category": "VC",
+    "title": "查询VC订单列表",
+    "url": "https://apidoc.lingxing.com/#/docs/VC/vcOrderPageList",
+    "status": "pending"
+  },
+  {
+    "category": "VC",
+    "title": "查询VC订单详情【PO】",
+    "url": "https://apidoc.lingxing.com/#/docs/VC/vcOrderPoDetail",
+    "status": "pending"
+  },
+  {
+    "category": "VC",
+    "title": "查询VC订单详情【DF】",
+    "url": "https://apidoc.lingxing.com/#/docs/VC/vcOrderDfDetail",
+    "status": "pending"
+  },
+  {
+    "category": "VC",
+    "title": "VC订单-确认发货【DF】",
+    "url": "https://apidoc.lingxing.com/#/docs/VC/vcOrderDfConfirmShipment",
+    "status": "pending"
+  },
+  {
+    "category": "VC",
+    "title": "VC订单-请求标签【DF】",
+    "url": "https://apidoc.lingxing.com/#/docs/VC/vcOrderDfSubmitShippingLabel",
+    "status": "pending"
+  },
+  {
+    "category": "VC",
+    "title": "VC订单-打印标签【DF】",
+    "url": "https://apidoc.lingxing.com/#/docs/VC/vcOrderDfGetShippingLabel",
+    "status": "pending"
+  },
+  {
+    "category": "VC",
+    "title": "配对/批量配对",
+    "url": "https://apidoc.lingxing.com/#/docs/Sale/productRelationbatchLink",
+    "status": "pending"
+  },
+  {
+    "category": "VC",
+    "title": "查询VC发货单列表",
+    "url": "https://apidoc.lingxing.com/#/docs/VC/vcDeliverPageList",
+    "status": "pending"
+  },
+  {
+    "category": "VC",
+    "title": "查询VC发货单详情",
+    "url": "https://apidoc.lingxing.com/#/docs/VC/vcDeliverDetail",
+    "status": "pending"
+  },
+  {
+    "category": "亚马逊源表数据",
+    "title": "查询亚马逊源报表-所有订单",
+    "url": "https://apidoc.lingxing.com/#/docs/SourceData/AllOrders",
+    "status": "pending"
+  },
+  {
+    "category": "亚马逊源表数据",
+    "title": "查询亚马逊源报表-FBA订单",
+    "url": "https://apidoc.lingxing.com/#/docs/SourceData/FbaOrders",
+    "status": "pending"
+  },
+  {
+    "category": "亚马逊源表数据",
+    "title": "查询亚马逊源报表-FBA换货订单",
+    "url": "https://apidoc.lingxing.com/#/docs/SourceData/fbaExchangeOrderList",
+    "status": "pending"
+  },
+  {
+    "category": "亚马逊源表数据",
+    "title": "查询亚马逊源报表-FBA退货订单",
+    "url": "https://apidoc.lingxing.com/#/docs/SourceData/RefundOrders",
+    "status": "pending"
+  },
+  {
+    "category": "亚马逊源表数据",
+    "title": "查询亚马逊源报表-FBM退货订单",
+    "url": "https://apidoc.lingxing.com/#/docs/SourceData/fbmReturnOrderList",
+    "status": "pending"
+  },
+  {
+    "category": "亚马逊源表数据",
+    "title": "查询亚马逊源报表-移除订单（新）",
+    "url": "https://apidoc.lingxing.com/#/docs/SourceData/RemovalOrderListNew",
+    "status": "pending"
+  },
+  {
+    "category": "亚马逊源表数据",
+    "title": "查询亚马逊源报表-移除订单（旧）",
+    "url": "https://apidoc.lingxing.com/#/docs/SourceData/SourceRemovalOrders",
+    "status": "pending"
+  },
+  {
+    "category": "亚马逊源表数据",
+    "title": "查询亚马逊源报表-移除货件（新）",
+    "url": "https://apidoc.lingxing.com/#/docs/SourceData/RemovalShipmentList",
+    "status": "pending"
+  },
+  {
+    "category": "亚马逊源表数据",
+    "title": "查询亚马逊源报表-移除货件（旧）",
+    "url": "https://apidoc.lingxing.com/#/docs/SourceData/RemovalLists",
+    "status": "pending"
+  },
+  {
+    "category": "亚马逊源表数据",
+    "title": "查询亚马逊源报表-FBA库存",
+    "url": "https://apidoc.lingxing.com/#/docs/SourceData/ManageInventory",
+    "status": "pending"
+  },
+  {
+    "category": "亚马逊源表数据",
+    "title": "查询亚马逊源报表-每日库存",
+    "url": "https://apidoc.lingxing.com/#/docs/SourceData/DailyInventory",
+    "status": "pending"
+  },
+  {
+    "category": "亚马逊源表数据",
+    "title": "查询亚马逊源报表-FBA可售库存",
+    "url": "https://apidoc.lingxing.com/#/docs/SourceData/AfnFulfillableQuantity",
+    "status": "pending"
+  },
+  {
+    "category": "亚马逊源表数据",
+    "title": "查询亚马逊源报表-预留库存",
+    "url": "https://apidoc.lingxing.com/#/docs/SourceData/ReservedInventory",
+    "status": "pending"
+  },
+  {
+    "category": "亚马逊源表数据",
+    "title": "查询亚马逊源报表-库龄表",
+    "url": "https://apidoc.lingxing.com/#/docs/SourceData/getFbaAgeList",
+    "status": "pending"
+  },
+  {
+    "category": "亚马逊源表数据",
+    "title": "查询亚马逊源报表-交易明细",
+    "url": "https://apidoc.lingxing.com/#/docs/SourceData/Transaction",
+    "status": "pending"
+  },
+  {
+    "category": "亚马逊源表数据",
+    "title": "查询亚马逊源报表-Amazon Fulfilled Shipments",
+    "url": "https://apidoc.lingxing.com/#/docs/SourceData/getAmazonFulfilledShipmentsList",
+    "status": "pending"
+  },
+  {
+    "category": "亚马逊源表数据",
+    "title": "查询亚马逊源报表-Amazon Fulfilled Shipments V1",
+    "url": "https://apidoc.lingxing.com/#/docs/SourceData/v1getAmazonFulfilledShipmentsList",
+    "status": "pending"
+  },
+  {
+    "category": "亚马逊源表数据",
+    "title": "查询亚马逊源报表-Inventory Event Detail",
+    "url": "https://apidoc.lingxing.com/#/docs/SourceData/getFbaInventoryEventDetailList",
+    "status": "pending"
+  },
+  {
+    "category": "亚马逊源表数据",
+    "title": "查询亚马逊源报表-Inventory Event Detail V1",
+    "url": "https://apidoc.lingxing.com/#/docs/SourceData/v1getFbaInventoryEventDetailList",
+    "status": "pending"
+  },
+  {
+    "category": "亚马逊源表数据",
+    "title": "查询亚马逊源报表- 盘存记录",
+    "url": "https://apidoc.lingxing.com/#/docs/SourceData/AdjustmentList",
+    "status": "pending"
+  },
+  {
+    "category": "亚马逊源表数据",
+    "title": "报告导出-创建导出任务",
+    "url": "https://apidoc.lingxing.com/#/docs/Statistics/reportCreateReportExportTask",
+    "status": "pending"
+  },
+  {
+    "category": "亚马逊源表数据",
+    "title": "报告导出-查询导出任务结果",
+    "url": "https://apidoc.lingxing.com/#/docs/Statistics/reportQueryReportExportTask",
+    "status": "pending"
+  },
+  {
+    "category": "亚马逊源表数据",
+    "title": "报告导出-报告下载链接续期",
+    "url": "https://apidoc.lingxing.com/#/docs/Statistics/AmazonReportExportTask",
+    "status": "pending"
+  }
+]

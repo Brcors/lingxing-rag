@@ -1,0 +1,68 @@
+"""共享配置；当前电脑的参数由已忽略的 config_local.py 覆盖。"""
+from pathlib import Path
+
+PROJECT_DIR = Path(__file__).resolve().parent
+
+# 已部署电脑在 config_local.py 配置 key；没有本机配置时可在此填写。
+DEEPSEEK_API_KEY = ""
+DEEPSEEK_BASE_URL = "https://api.deepseek.com"
+# DeepSeek V4.1 Flash 当前的官方 API 名称。
+DEEPSEEK_MODEL = "deepseek-flash"
+DEEPSEEK_TEMPERATURE = 0.2
+DEEPSEEK_MAX_TOKENS = 4096
+DEEPSEEK_TIMEOUT = 120
+
+DOCS_DIR = PROJECT_DIR / "领星接口API文档"
+SUPPLEMENT_DIR = PROJECT_DIR / "knowledge"
+DATA_DIR = PROJECT_DIR / "data"
+MODEL_DIR = PROJECT_DIR / "models" / "bge-small-zh-v1.5"
+EMBEDDING_MODEL = "BAAI/bge-small-zh-v1.5"
+EMBEDDING_DEVICE = "cpu"
+EMBEDDING_BATCH_SIZE = 32
+CPU_THREADS = 4
+
+CHUNK_TARGET_TOKENS = 400
+CHUNK_MAX_TOKENS = 480
+CHUNK_OVERLAP_TOKENS = 50
+VECTOR_TOP_K = 20
+BM25_TOP_K = 20
+RRF_K = 60
+RERANK_CANDIDATES = 20
+FINAL_TOP_K = 6
+CONTEXT_TOKEN_BUDGET = 4000
+
+RERANK_ENABLED = True
+RERANK_MODEL = "Xenova/bge-reranker-base"
+RERANK_BACKEND = "onnx-int8"
+RERANK_BATCH_SIZE = 4
+RERANK_MAX_LENGTH = 512
+RERANK_MIN_SCORE = -1.0  # 原始重排分数低于此值时视为整体证据不足。
+
+QUERY_DECOMPOSITION_ENABLED = True
+QUERY_DECOMPOSITION_MAX_SUBQUESTIONS = 3
+QUERY_DECOMPOSITION_MAX_TOKENS = 320
+
+MYSQL_ENABLED = True
+MYSQL_HOST = "127.0.0.1"
+MYSQL_PORT = 3306
+MYSQL_USER = "root"
+MYSQL_PASSWORD = ""
+MYSQL_DATABASE = "lingxing_rag"
+MYSQL_CHARSET = "utf8mb4"
+MYSQL_CONNECT_TIMEOUT = 3
+MYSQL_KB_MAX_RECORDS = 1000
+MYSQL_KB_TOP_K = 1
+MYSQL_KB_MIN_SIMILARITY = 0.68
+MYSQL_KB_CONTEXT_TOKENS = 350
+
+HOST = "127.0.0.1"
+PORT = 5000
+AUTO_BUILD_INDEX = True
+OPEN_BROWSER = True
+
+# 本机部署参数放在已被 Git 忽略的文件中，迁移项目时无需改公共配置。
+try:
+    from config_local import *  # noqa: F403
+except ModuleNotFoundError as error:
+    if error.name != "config_local":
+        raise
