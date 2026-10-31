@@ -1,145 +1,230 @@
-# 领星接口文档问答
+# 领星接口文档 RAG
 
-Flask 简洁问答页面 + BGE-small 本地向量 + ChromaDB + jieba BM25 + RRF + BGE 本地重排序。回答由 DeepSeek V4.1 Flash 生成，附来源文档和检索片段。账户登录后，完整生成的问答按用户和独立对话写入 MySQL，提供持久历史与滚动记忆。只有点击 👍 的问答才额外加入所有账户共享的辅助知识库。
+基于领星 API 文档的检索增强问答工具。用自然语言查找接口、请求参数、返回字段和业务流程，回答附带来源文档，便于回到原文核对。
 
-## 开始使用
+本地检索采用 **BGE 向量 + BM25 + RRF + ONNX 重排序**，回答生成使用 **DeepSeek API**。提供 Flask Web 页面、账户登录、游客模式、独立对话和 MySQL 历史记录。
 
-当前电脑已完成本地部署，直接运行 `start.bat`；便携 MySQL 会随项目自动启动。数据库位置、管理命令和本机部署说明见 [DEPLOYMENT.md](DEPLOYMENT.md)。
+[快速开始](#快速开始) · [部署说明](DEPLOYMENT.md) · [配置示例](config_local.example.py) · [第三方资料说明](THIRD_PARTY_NOTICES.md) · [MIT License](LICENSE)
 
-从 GitHub 首次下载时，将 `config_local.example.py` 复制为 `config_local.py` 并填写自己的 API key 和 MySQL 参数。仓库仅包含代码、文档和空白配置示例；本机凭证、账户与聊天记录、数据库文件、模型权重、虚拟环境和运行日志均不随仓库上传。模型可用下方管理命令下载，数据库需要在自己的电脑上安装和配置。
+## 功能
 
-1. 本机已经配置好 key 和 MySQL；更换 key 请编辑 `config_local.py` 中的 `DEEPSEEK_API_KEY`。全新安装且没有本机配置文件时，在 `config.py` 填写 key 和数据库连接参数。
-2. 双击 `start.bat`。启动时检查文档变动并复用已有模型和索引，浏览器会打开 `http://127.0.0.1:5000`。
-3. 确认 MySQL 服务已启动，在页面注册账户并登录。可新建多个独立对话，也可从左侧继续已有对话。默认流式生成回答；“仅检索”不调用 DeepSeek，也不保存成个人问答。
+- **接口文档问答**：按业务分类提问，查看答案、检索片段及完整文档。
+- **本地混合检索**：结合中文分词、参数名匹配和语义向量，再用本地模型重排序。
+- **仅检索模式**：不调用 DeepSeek；未配置 API key 时也可查看检索结果。
+- **增量索引**：复用未改变的向量，完成新索引后再切换活动版本。
+- **独立对话与记忆**：完整回答按用户和对话保存，提供滚动摘要。
+- **游客模式**：使用临时对话，退出时删除该游客的记录，过期记录由后台清理。
+- **点赞知识库**：明确点赞的问答才进入共享辅助知识库，接口原文具有更高优先级。
 
-重复双击 `start.bat` 会识别本项目已运行的服务并打开页面，不会重复启动或报端口占用。若 5000 被其他程序占用，可执行 `start.bat --port 5001`。脚本支持 `--no-browser`，缺少依赖时会自动安装。批处理使用 Windows CRLF 换行，脚本命令保持 ASCII，中文日志由 UTF-8 的 Python 进程输出。
+本项目提供文档检索与解释，不会替用户调用领星业务 API。
 
-填写 key 后需要重启服务。直接运行 Python 时，非空的 `DEEPSEEK_API_KEY` 环境变量优先于文件中的值；空环境变量不会覆盖文件配置。`start.bat` 在 `config_local.py` 已明确配置 key 时优先使用该本机配置，详见部署说明。配置文件包含明文 key 时请自行保管；项目不会向前端返回 key。
+## 工作流程
 
-当前官方调用名称是 `deepseek-flash`，对应 V4.1 Flash；参考 https://api-docs.deepseek.com/api/create-chat-completion/ 和 https://www.deepseek.com/en/news/deepseek-v4-1-flash/ 。用户提供的 `LLM.py` 保持原文件，项目适配器位于 `rag/generation/client.py`。
+```mermaid
+flowchart LR
+    A[接口 Markdown 文档] --> B[按章节、表格和示例切块]
+    B --> C[BGE 本地向量 / ChromaDB]
+    B --> D[jieba / BM25]
+    Q[用户问题] --> C
+    Q --> D
+    C --> E[RRF 融合]
+    D --> E
+    E --> F[ONNX 本地重排序]
+    F --> G[带来源的上下文]
+    G --> H[DeepSeek 流式回答]
+    G --> I[仅检索预览]
+```
 
-## 环境与文档
+## 快速开始
 
-Python 3.11 及以上，当前在 Windows / Python 3.13 上准备。依赖安装于项目 `.venv`；本机环境复用了系统已安装的部分库。迁移到其他机器时新建环境并执行：
+以下使用 Windows PowerShell。项目已在 Windows / Python 3.13 环境验证；需要 Python 3.11 或以上版本。
+
+### 1. 获取代码与安装依赖
 
 ```powershell
+git clone https://github.com/Brcors/lingxing-rag.git
+cd lingxing-rag
 python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install --upgrade pip
+
+# 默认使用 CPU，先安装 CPU 版 PyTorch。
+.\.venv\Scripts\python.exe -m pip install torch --index-url https://download.pytorch.org/whl/cpu
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
-.\.venv\Scripts\python.exe run.py
+
+Copy-Item config_local.example.py config_local.py
 ```
 
-默认文档目录：项目内的 `领星接口API文档/`。更改位置在 `config.py` 设置 `DOCS_DIR`。原始文档只读，排除索引目录页、隐藏目录和抓取任务 JSON。`tasks.json` 用来恢复原文 URL。
+仓库包含程序、接口文档快照和空白配置示例，不包含 API key、数据库、账户与聊天记录、模型权重或虚拟环境。
 
-本地模型为 `BAAI/bge-small-zh-v1.5`，约 96 MB 权重、512 维，默认 CPU。首次下载需要联网；模型保存在 `models/`，完整下载后向量计算可离线运行。生成回答需要联网调用 DeepSeek。
+### 2. 准备 MySQL
 
-模型缓存记录仓库 ID 与具体 revision。更换 `EMBEDDING_MODEL` 时使用单独的模型缓存，避免沿用旧权重；索引更新期间的分词计数与编码共享锁，防止并发访问同一 tokenizer。
+先安装并启动 MySQL，建议使用 8.4 LTS。Web 页面的登录、注册和游客模式均需要数据库。
 
-`knowledge/` 保存注明来源与日期的官方接入更新摘要，用来处理旧快照的 token 迁移示例；其余接口资料仍是本地快照，不承诺自动同步官网。
+在 MySQL 管理终端中创建数据库及专用账户，将密码占位符替换为自己的密码：
 
-## 模块
+```sql
+CREATE DATABASE IF NOT EXISTS lingxing_rag
+    CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER 'lingxing_rag'@'127.0.0.1'
+    IDENTIFIED BY 'CHANGE_ME_MYSQL_PASSWORD';
+GRANT ALL PRIVILEGES ON lingxing_rag.*
+    TO 'lingxing_rag'@'127.0.0.1';
+```
 
-| 路径 | 职责 |
-| --- | --- |
-| `app/` | Flask 应用工厂、Blueprint、页面、静态资源 |
-| `rag/ingestion/` | 文档解析，保留标题层级、表格行和代码块 |
-| `rag/embedding.py` | 本地模型下载、token 计数、归一化向量 |
-| `rag/indexing/` | 版本化 Chroma 集合、增量向量复用、原子切换 |
-| `rag/retrieval/` | jieba + 标识符分词、BM25、向量、RRF、可选重排序 |
-| `rag/context.py` | 补齐所属接口与章节、去重、上下文预算 |
-| `rag/generation/` | 提示词、DeepSeek 请求、流式响应与错误处理 |
-| `rag/knowledge/` | 点赞暂存、MySQL 持久化，以及历史点赞问答的混合检索 |
-| `rag/service.py` | 统一检索、生成与点赞反馈编排 |
+应用首次访问账户功能时会自动创建所需数据表，无需手动导入表结构。更多说明见 [DEPLOYMENT.md](DEPLOYMENT.md)。
 
-MySQL 使用 `lingxing_rag.liked_answers` 表（首次检索或点赞时自动创建）。该表只保存用户明确点击 👍 的共享问答、来源和本地向量。完整问答的个人记录另存在 chat_turns，不参与其他账户的个人上下文。后续检索使用 jieba BM25 与本地 BGE 向量进行融合，可选复用本地重排序模型；每次最多补充 1 条点赞问答，上下文最多占用 350 token。点赞问答会明确标成低优先级辅助参考，当前接口文档优先；原回答引用的来源信息会一并保留。修改 `config.py` 的 `MYSQL_*` 项可调整数据库连接和检索阈值，将 `MYSQL_ENABLED` 设为 `False` 可关闭此功能。依赖为 `PyMySQL`。
+### 3. 填写本机配置
 
-检索块按章节、段落和表格结构划分，目标约 400 个 BGE tokenizer token，包含元数据后不超过 480；长段落重叠约 50 token。超长表格单行或代码行无法整体放入模型时，生成带有字段/示例标签的续片，原文可完整查看。最终上下文的 4000 token 是针对生成模型的保守估算，与 BGE tokenizer 不同。
+编辑刚复制的 `config_local.py`：
 
-BM25 与向量各取 20 条，按 chunk 去重、RRF 融合及标题/路径规则评分后截取前 20 条；本地重排序模型重新判断问题与各候选的相关性，再限制同接口片段占比，选约 6 条并补齐父级信息。返回的证据数量可能因同章去重和长度预算少于 6。多步流程问题仍需文档有明确依赖；本工具不会自动发起领星业务 API 请求。
+```python
+DEEPSEEK_API_KEY = ""  # 填写自己的 key；留空时可使用仅检索模式。
 
-仅当问题含流程、步骤、前置条件、依赖或先后顺序等线索时，才额外调用一次 DeepSeek 将问题拆成最多 3 个检索子问题；普通问题和“仅检索”模式不触发拆解。拆解结果与原问题分别检索，合并去重后统一重排序；拆解失败时回退原问题。最终候选的最佳重排分数低于 `RERANK_MIN_SCORE`（默认 -1.0）时，系统不引用这些候选并提示补充问题信息。阈值是本地模型原始分数，不是概率，可在 `config.py` 调整；重排序不可用时仍按混合检索顺序回退。
+MYSQL_HOST = "127.0.0.1"
+MYSQL_PORT = 3306
+MYSQL_USER = "lingxing_rag"
+MYSQL_PASSWORD = ""  # 填写上一步设置的数据库密码。
+MYSQL_DATABASE = "lingxing_rag"
+```
 
-上下文先为各命中章节保留最小证据，再补其他命中和父级内容，避免一个长章节挤掉其余来源。引用处理保留代码中的 `[S1]` 等字面文本。DeepSeek 读取超时和连接中断不自动重发已可能被处理的请求；只有连接建立超时及可重试 HTTP 状态会进行有限重试。
+`config_local.py` 已被 Git 忽略。通用检索参数在 [config.py](config.py)，本机文件可以覆盖同名参数。不要将真实凭证提交到仓库。
 
-## 管理命令
+默认生成模型配置为 `deepseek-flash`，请求发往 [DeepSeek API](https://api-docs.deepseek.com/)。生成回答和对话摘要需要可用的 API key 及账户余额；向量计算和重排序均在本机运行。
+
+### 4. 下载模型并建立索引
 
 ```powershell
-.\.venv\Scripts\python.exe manage.py check
-.\.venv\Scripts\python.exe manage.py download-model
-.\.venv\Scripts\python.exe manage.py download-reranker
-.\.venv\Scripts\python.exe manage.py index
-.\.venv\Scripts\python.exe manage.py index --force
-.\.venv\Scripts\python.exe manage.py search "如何查询 FBA 货件列表？"
-.\.venv\Scripts\python.exe run.py --no-browser --port 5001
+.\.venv\Scripts\python.exe -X utf8 manage.py download-model
+.\.venv\Scripts\python.exe -X utf8 manage.py download-reranker
+.\.venv\Scripts\python.exe -X utf8 manage.py index
+.\.venv\Scripts\python.exe -X utf8 manage.py check
 ```
 
-页面“更新文档索引”也可增量更新。新增、变更和删除的文档都体现在新一代语料中；相同 chunk 的旧向量复用。模型、切块设置或解析器版本变化触发重新索引。构建完成后才切换活动指针，构建失败继续使用上一代索引。旧代集合留作恢复，不自动删除。
+默认下载的模型为：
 
-Windows 中文绝对路径可能导致 ChromaDB 的 HNSW 文件无法重启读取；本项目从项目目录向 Chroma 传递英文相对路径，数据仍保存在本项目 `data/chroma` 内。入口脚本自动切换到项目目录；从其他程序导入核心模块时也应从项目目录启动。索引保留独立的 `vectors.npy` 缓存，更新和修复可以复用向量。发布活动索引前会执行实际向量查询，不只检查记录数量。
+- [BAAI/bge-small-zh-v1.5](https://huggingface.co/BAAI/bge-small-zh-v1.5)：中文向量模型，512 维，权重约 96 MB。
+- [Xenova/bge-reranker-base](https://huggingface.co/Xenova/bge-reranker-base)：重排序模型，使用 ONNX INT8 权重，约 279 MB。
 
-重排序默认开启，使用支持中英文的 `BAAI/bge-reranker-base`（MIT 许可）的预量化 ONNX INT8 版本，来源为 `Xenova/bge-reranker-base`：https://huggingface.co/Xenova/bge-reranker-base 。模型权重约 279 MB，在本机 CPU 运行，不调用付费 API。直接下载预量化权重，避免本机转换时占用大量内存。完整缓存位于 `models/reranker/` 的独立模型目录，记录仓库 ID 与 revision，后续离线加载。启动时预热一次，同一进程复用模型并串行推理，避免并发争用 CPU。
+首次下载需要联网。完整缓存保存在 `models/` 并记录模型仓库与 revision，之后本地推理可离线运行。ChromaDB 嵌入式运行，向量数据保存在 `data/chroma/`，不需要另外启动向量数据库服务。
 
-在 `config.py` 可设置 `RERANK_ENABLED`、`RERANK_MODEL`、`RERANK_BACKEND`、`RERANK_CANDIDATES`（20）、`RERANK_BATCH_SIZE`（4）、`RERANK_MAX_LENGTH`（512，问题和片段合计的模型 token 上限）和最低分 `RERANK_MIN_SCORE`。`onnx-int8` 需要模型仓库提供 `onnx/model_int8.onnx`；如改用 `BAAI/bge-reranker-v2-m3`，需同时设置后端为 `torch`，按原精度加载。重排使用原始相关性分数，不与量纲不同的 RRF 分数直接相加。同分保持融合后的先后顺序。重排失败时本次回退 RRF 顺序，页面显示提示，详细原因写入启动日志。更换重排模型无需重算文档向量，修改配置后重启服务。
+文档默认读取项目内的 `领星接口API文档/`。可修改 `DOCS_DIR` 接入其他 Markdown 目录；`knowledge/` 中的补充说明也参与检索。
 
-`manage.py check` 可检查重排权重是否下载；检索返回的统计包含 `rerank_applied`、`rerank_model`、`rerank_candidates` 和 `rerank_seconds`，页面显示实际重排耗时。关闭重排可将 `RERANK_ENABLED` 改为 `False`。
+### 5. 启动和使用
 
-## API
+```powershell
+.\start.bat
+```
 
-- `GET /api/status`：索引、模型配置状态（不返回 key）。
-- `POST /api/ask`：JSON 一次性返回答案、来源和耗时。
-- `POST /api/ask/stream`：NDJSON，依次返回 `status`、`sources`、`token`、`done` 或 `error`。
-- `POST /api/feedback`：提交流式 `done` 事件中的 `feedback_id`，仅用于明确点赞后的持久化；接口不接受浏览器提交的问答正文。
-- `POST /api/index`：后台更新索引，状态通过 `/api/status` 查看。
-- `GET /documents/<document_id>`：本地完整文档预览。
+浏览器打开 <http://127.0.0.1:5000>，注册账户或选择“以游客身份进入”，然后新建对话提问。也可以先选择“仅检索”检查文档命中情况。
 
-提问 JSON：
+例如：
+
+- 查询货件列表需要哪些请求参数？
+- `/erp/sc/data/fba_report/shipmentList` 使用什么请求方式？
+- 创建 STA 任务需要哪些步骤？
+- 查询利润报表-SKU 支持什么时间范围？
+
+启动时会检查文档变动、复用已有索引并预热模型。重复启动会识别已运行的同一项目；端口被其他程序占用时，可执行 `start.bat --port 5001`。
+
+停止服务使用 `stop.bat`；更换端口后使用 `stop.bat -Port 5001`。详细启动参数和数据库生命周期见 [部署说明](DEPLOYMENT.md)。
+
+## 常用管理命令
+
+```powershell
+# 查看配置与索引状态，不显示 API key
+.\.venv\Scripts\python.exe -X utf8 manage.py check
+
+# 增量更新；--force 会重新计算全部向量
+.\.venv\Scripts\python.exe -X utf8 manage.py index
+.\.venv\Scripts\python.exe -X utf8 manage.py index --force
+
+# 命令行检索，不调用生成 API
+.\.venv\Scripts\python.exe -X utf8 manage.py search "如何查询 FBA 货件列表？"
+
+# 不自动打开浏览器，并指定 Web 端口
+.\start.bat --no-browser --port 5001
+```
+
+## 检索与会话设计
+
+**检索**：按标题层级、段落、表格行和代码块切分文档；向量与 BM25 各召回 20 条，RRF 融合后重排序，默认选取约 6 条证据。上下文补齐接口及章节信息，证据数量可能受去重和长度预算影响。重排序失败时回退混合检索，并在页面提示。
+
+**复杂问题**：仅在生成模式下，对带有流程、步骤或前置条件线索的问题尝试拆解为最多 3 个检索子问题。此过程会额外调用 DeepSeek；普通问题和仅检索模式不触发拆解。
+
+**个人记忆**：完整问答写入 MySQL。每个对话首次积累 5 组完整问答后生成摘要，之后每新增 4 组更新一次。原始问答保留，摘要仅提供对话背景，接口事实以本轮检索资料为准。
+
+**共享知识**：个人历史按账户隔离。只有用户明确点赞的问答会进入共享辅助知识库，每次最多补充 1 条；当前接口文档优先于历史问答。
+
+**游客记录**：游客使用独立临时会话；退出游客或转为正式账户时清除该游客的临时记录。关闭浏览器不会立即删除记录，服务会清理超过 24 小时未活动的游客数据。
+
+## HTTP API
+
+- `GET /api/status`：公开健康检查，返回索引与模型状态。
+- `POST /api/auth/register`、`POST /api/auth/login`、`POST /api/auth/guest`：注册、登录或进入游客模式。
+- `GET /api/conversations`、`POST /api/conversations`：列出或创建独立对话。
+- `POST /api/ask`：一次性返回答案、来源和耗时。
+- `POST /api/ask/stream`：以 NDJSON 返回状态、来源、文本片段及完成事件。
+- `POST /api/feedback`：点赞自己的已保存问答；游客不可写入共享知识库。
+- `POST /api/index`：后台更新文档索引，需要正式账户。
+- `GET /documents/<document_id>`：查看完整来源文档。
+
+除公开健康检查及登录入口外，业务接口需要登录会话。所有修改请求还需携带页面 `meta[name="csrf-token"]` 中的值，放入 `X-CSRF-Token` 请求头。
+
+提问请求示例：
 
 ```json
-{"question":"如何查询货件列表？","category":"FBA","mode":"answer","conversation_id":"对话ID","request_id":"每次提问的唯一UUID"}
+{
+  "question": "查询货件列表需要哪些请求参数？",
+  "category": "FBA",
+  "mode": "answer",
+  "conversation_id": "创建对话后返回的 ID",
+  "request_id": "8cf15d0e-a7c4-4b31-8bdd-10bc52ff8bec"
+}
 ```
 
-`category` 可省略；`mode` 可设为 `retrieve`；历史和记忆从服务器按登录账户与 conversation_id 读取，忽略浏览器提交的 history。无 API key 时自动返回检索预览。页面 Markdown 经后端清理；不使用外部 CDN。
+`category` 可省略；`mode` 可设为 `retrieve`。个人上下文由服务器按账户和对话读取，不接受浏览器传入的历史记录作为个人上下文。
 
-## 验证
+## 项目结构
+
+```text
+app/                       Flask 页面、认证与 HTTP API
+rag/ingestion/             Markdown 解析与语义切块
+rag/indexing/              ChromaDB、增量索引与版本切换
+rag/retrieval/             BM25、向量融合与本地重排序
+rag/generation/            DeepSeek 客户端、提示词与问题拆解
+rag/accounts/              账户、独立对话、游客与记忆
+rag/knowledge/             点赞问答持久化与辅助检索
+knowledge/                 带来源的接入更新说明
+领星接口API文档/           第三方接口文档快照
+config.py                  通用配置
+config_local.example.py    不含真实凭证的本机配置示例
+manage.py                  模型下载、索引和检索命令
+run.py                     Waitress 服务入口
+```
+
+`data/`、`models/`、`runtime/`、`.venv/` 和 `config_local.py` 只保存在本机，不提交到 Git。
+
+## 开发与验证
 
 ```powershell
 .\.venv\Scripts\python.exe -m pip install -r requirements-dev.txt
-.\.venv\Scripts\python.exe -m pytest -q
-.\.venv\Scripts\python.exe evaluate.py
+
+# 不依赖 MySQL 的测试
+.\.venv\Scripts\python.exe -m pytest -q tests --ignore=tests/test_accounts_memory.py --ignore=tests/test_guests.py
+
+# 完整测试；需使用具备临时建库、删库权限的测试数据库账户
+.\.venv\Scripts\python.exe -m pytest -q tests
+
+# 真实本地模型的固定检索案例，需先下载模型并建立索引
+.\.venv\Scripts\python.exe -X utf8 evaluate.py
 ```
 
-单元与接口测试包含 Markdown 层级、表格切分、标识符分词、融合、上下文预算、向量复用/删除、流式协议、完整检索到生成编排和 API 错误处理。它们使用本地替身验证模型调用协议，不消耗 DeepSeek 余额；真实 API key 的授权及付费生成需填写 key 后验证。`evaluate.py` 使用真实本地向量模型检查 8 条固定案例，并将结果保存到 `data/retrieval-evaluation.json`；该小样本不代表总体准确率。
+账户和游客集成测试使用随机命名的临时 MySQL 数据库，结束时删除测试库；模型响应使用替身，不请求付费生成接口。应用专用账户通常只有自身数据库权限，运行完整测试前请单独准备测试账户。
 
-若 Windows 的公共临时目录存在权限冲突，可在索引已建立后使用 `python -m pytest -q --basetemp data/pytest-tmp`，该目录专用于可丢弃的测试数据。
+`evaluate.py` 检查 8 个固定案例，结果写入 `data/retrieval-evaluation.json`；这组案例不能代表总体准确率。欢迎通过 [Issues](https://github.com/Brcors/lingxing-rag/issues) 提交问题，或用 Pull Request 改进检索、测试和文档。
 
+## 文档来源与许可证
 
-## 账户、独立对话与个人记忆
+本项目为独立开发的文档问答工具，不是领星官方产品。接口文档来自 [lpj2026/one2](https://github.com/lpj2026/one2/tree/ae142f1b0b33a8ac834c1e7c27482ff9badbcd02/领星接口API文档) 的固定快照；文档可能滞后于接口更新，调用前请核对 [领星官方 API 文档](https://apidoc.lingxing.com/)。
 
-MySQL 新增 auth_users（用户名与 Argon2id 密码哈希）、chat_conversations（用户所属对话及当前摘要）、chat_turns（完整问答、来源与点赞标识）、chat_memory_versions（可追溯的摘要版本）。首次访问账户功能时自动建表；既有 liked_answers 继续全局共享，未点赞的个人问答不进入共享检索。
-
-每个独立对话首次积累 5 组完整问答后调用 DeepSeek 整理一条摘要；此后每新增 4 组，将旧摘要与这 4 组更新成新摘要。原始问答始终保留。摘要后台执行，模型失败保留待整理记录并显示提示，之后打开或继续该对话时重试。数据库租约避免多个进程同时整理相同批次；进程中断后过期租约会自动恢复。连续对话使用当前摘要和最多 4 组尚未整理的近期问答，摘要仅提供对话背景，接口事实仍以本轮检索资料为依据。整理完成后，上一个问题仍作为简短追问的检索指代线索。
-
-个人页面与问答 API 需要登录，GET /api/status 保留为公开健康检查。会话 cookie 只记录登录标识及 CSRF 值，HttpOnly、SameSite=Lax；默认 8 小时过期。签名密钥自动生成在 data/auth-secret.key，可用 FLASK_SECRET_KEY 环境变量覆盖。所有修改请求需发送页面 meta csrf-token 的值到 X-CSRF-Token 请求头。通过 HTTPS 部署时设置 SESSION_COOKIE_SECURE=true；本机 HTTP 保持默认。
-
-- GET /login、GET /register：登录注册页面。
-- POST /api/auth/register、POST /api/auth/login、POST /api/auth/logout：注册、登录和退出。
-- GET /api/conversations、POST /api/conversations：列出个人对话、新建对话。
-- GET /api/conversations/<id>：读取当前用户拥有的对话，最近 50 组问答；用 ?before=<问答ID> 继续向前翻页。
-- POST /api/ask、POST /api/ask/stream：携带 conversation_id 和唯一 request_id。完整回答保存后再发送 done；重复 request_id 返回已保存的回答，防止重复计入记忆。
-- POST /api/feedback：只能点赞自己的已保存问答；刷新和服务重启后仍可点赞。点赞内容进入共享知识库。
-
-账户功能需要 MySQL；数据库关闭时登录和持久化操作会返回明确错误。个人上下文按用户和对话双重校验，其他对话不会自动带入当前上下文。记忆整理额外消耗 DeepSeek token，首次第 5 组后一次，此后每新增 4 组一次。
-
-新增的 test_accounts_memory.py 使用随机命名的独立 MySQL 测试库，测试结束删除；模型响应采用替身，不请求真实 DeepSeek。需本机 MySQL 可用且测试账户有建库权限。
-
-
-## 游客模式
-
-登录和注册页面都提供“以游客身份进入”。游客无需创建账户，可以新建多个临时独立对话，使用官方文档及全局点赞知识库检索。游客不能点赞写入共享知识库，也不能更新共享文档索引；这些限制由后端校验。
-
-游客问答独立存入 guest_chat_turns 表，使用 guest_session_id 隔离不同游客。对话元数据与临时摘要复用 chat_conversations、chat_memory_versions；原有账户数据保持按 user_id 隔离。游客临时记忆采用同样的首次 5 组、之后每新增 4 组滚动摘要规则。
-
-点击“退出游客”后，服务器删除该游客的全部临时对话，外键级联删除问答与摘要版本，其他游客和注册账户不受影响。旧游客 cookie 无法恢复已经清除的记录。游客成功注册或登录正式账户时也会清理该游客记录，不自动迁移到正式账户。
-
-关闭页面、断网或关闭浏览器不会可靠通知服务器。游客每次活动会把有效期延长到 24 小时后；服务运行期间每分钟清理一次过期数据，重启时也会检查。服务或 MySQL 停止时无法执行删除，恢复后继续清理。正式账户登录保持 8 小时的滑动会话有效期，游客为 24 小时。
-
-新增接口 POST /api/auth/guest；需和其他修改请求一样提供 X-CSRF-Token。账户表升级是幂等的，自动增加游客标识、过期时间和独立游客问答表，不删除注册账户历史。游客模式同样需要 MySQL 服务运行。
+本项目原创程序代码及原创说明采用 [MIT License](LICENSE)。第三方接口文档、模型、依赖及商标不因本项目开源而改变其原有权利或许可，详见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
