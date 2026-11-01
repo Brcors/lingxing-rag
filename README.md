@@ -24,7 +24,7 @@
 
 ```mermaid
 flowchart LR
-    A[接口 Markdown 文档] --> B[按章节、表格和示例切块]
+    A[多格式知识文档] --> B[按章节、表格和示例切块]
     B --> C[BGE 本地向量 / ChromaDB]
     B --> D[jieba / BM25]
     Q[用户问题] --> C
@@ -109,7 +109,7 @@ MYSQL_DATABASE = "lingxing_rag"
 
 首次下载需要联网。完整缓存保存在 `models/` 并记录模型仓库与 revision，之后本地推理可离线运行。ChromaDB 嵌入式运行，向量数据保存在 `data/chroma/`，不需要另外启动向量数据库服务。
 
-文档默认读取项目内的 `领星接口API文档/`。可修改 `DOCS_DIR` 接入其他 Markdown 目录；`knowledge/` 中的补充说明也参与检索。
+文档默认读取项目内的 `领星接口API文档/`。知识目录和 `knowledge/` 补充目录支持 Markdown、TXT、PDF、DOCX、XLSX、XLSM、XLS、CSV 和 TSV；Excel 工作表会连同表头与行内容转换为可检索文本。扫描版或文字稀少的 PDF 页面使用 PaddleOCR，需额外安装 `requirements-ocr.txt`；首次 OCR 会下载识别模型。GitHub 自动同步仍只同步上游 Markdown 文档和 `tasks.json`，其他格式可放入本机文档目录。
 
 ### 5. 启动和使用
 
@@ -228,7 +228,7 @@ DOC_SYNC_INTERVAL_SECONDS = 3600  # 最小 60 秒
 
 ```text
 app/                       Flask 页面、认证与 HTTP API
-rag/ingestion/             Markdown 解析与语义切块
+rag/ingestion/             多格式文档解析与语义切块
 rag/indexing/              ChromaDB、增量索引与版本切换
 rag/retrieval/             BM25、向量融合与本地重排序
 rag/generation/            DeepSeek 客户端、提示词与问题拆解

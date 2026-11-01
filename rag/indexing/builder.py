@@ -10,7 +10,7 @@ from filelock import FileLock
 
 from rag.indexing.store import CorpusStore, VectorStore, atomic_json
 from rag.ingestion.chunker import SemanticChunker
-from rag.ingestion.parser import MarkdownLoader
+from rag.ingestion.parser import DocumentLoader
 
 logger = logging.getLogger(__name__)
 
@@ -27,14 +27,14 @@ class IndexBuilder:
         self.settings.data_dir.mkdir(parents=True, exist_ok=True)
         with FileLock(str(self.settings.data_dir / "index.lock"), timeout=1):
             progress("读取文档与本地模型……")
-            documents = MarkdownLoader(self.settings).load()
+            documents = DocumentLoader(self.settings).load()
             if not documents:
-                raise ValueError("文档目录中没有可索引的 Markdown 内容。")
+                raise ValueError("文档目录中没有可索引的支持格式内容。")
             signature = self.embedding.signature()
             hashes = {document.relative_path: document.content_hash for document in documents}
             sources = {d.document_id: d.source_url for d in documents}
             versions = {d.document_id: [d.source_revision, d.updated_at, d.synced_at, d.update_basis] for d in documents}
-            fingerprint = hashlib.sha256(json.dumps([signature, hashes, sources, versions, "storage-v4-freshness"], sort_keys=True).encode()).hexdigest()
+            fingerprint = hashlib.sha256(json.dumps([signature, hashes, sources, versions, "storage-v5-multiformat"], sort_keys=True).encode()).hexdigest()
             old = self.store.active()
             vectors = VectorStore(self.settings)
             if not force and old and old.get("fingerprint") == fingerprint:

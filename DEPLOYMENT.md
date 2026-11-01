@@ -38,7 +38,15 @@ Copy-Item config_local.example.py config_local.py
 
 模型默认使用 CPU，缓存在 `models/`。修改 `EMBEDDING_MODEL` 后需要建立新索引；仅更换重排序模型不需要重新计算文档向量。
 
-接口文档目录为项目内的 `领星接口API文档/`。程序忽略 `index.md`、隐藏目录和抓取任务 JSON；`tasks.json` 用于恢复来源 URL。额外的 Markdown 目录可通过 `DOCS_DIR` 配置。
+接口文档目录为项目内的 `领星接口API文档/`。知识目录及 `knowledge/` 补充目录支持 Markdown、TXT、PDF、DOCX、XLSX、XLSM、XLS、CSV 和 TSV；程序忽略 `index.md`、隐藏目录和抓取任务 JSON。`tasks.json` 仅用于恢复来源 URL，不会作为知识内容入库。可通过 `DOCS_DIR` 配置其他本机文档目录。
+
+PDF 优先提取内嵌文本；扫描页和文字稀少页面使用 PaddleOCR。安装 PaddleOCR CPU 版及中文识别依赖：
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install -r requirements-ocr.txt
+```
+
+PaddleOCR 的识别模型在首次处理扫描 PDF 时下载并缓存在本机。普通数字 PDF 不需要启动 OCR。
 
 启动及更新索引时会复用未改变的向量。新一代索引完成校验后才切换活动指针，构建失败保留上一代；旧代不会自动删除。Windows 中文绝对路径的 ChromaDB 索引使用英文相对路径访问，因此从其他程序导入核心模块时也请以项目目录作为工作目录。
 
@@ -53,7 +61,7 @@ Copy-Item config_local.example.py config_local.py
 - `DOC_SYNC_BASE_REVISION`：现有文档快照的完整初始提交，用于首次检查本地修改；接入自有来源且没有初始提交时可设为空。
 - `DOC_SYNC_INTERVAL_SECONDS`：检查间隔，默认 3600，最小 60。
 
-切换来源或文档目录时，请使用独立的 `DATA_DIR`，避免混用旧版本记录和索引。同步只处理 Markdown 和根目录 `tasks.json`；本地额外的笔记保留。每个版本的完整增删改清单与修改前备份保存在 `data/document-sync/versions/`。
+切换来源或文档目录时，请使用独立的 `DATA_DIR`，避免混用旧版本记录和索引。GitHub 同步只处理 Markdown 和根目录 `tasks.json`；本地额外的笔记及其他支持格式会保留并参与索引。每个版本的完整增删改清单与修改前备份保存在 `data/document-sync/versions/`。
 
 后台同步依赖 GitHub 公共 API 的网络与限额，失败信息会显示在侧栏。现有索引继续提供检索。文档版本时间采用上游提交时间，不代表官方发布日期。
 

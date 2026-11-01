@@ -20,7 +20,7 @@ goto check_python
 :check_python
 ".venv\Scripts\python.exe" -X utf8 -c "import sys; sys.exit(sys.version_info < (3, 11))"
 if errorlevel 1 goto python_missing
-".venv\Scripts\python.exe" -X utf8 -c "import importlib.util,sys; names=('flask','waitress','chromadb','jieba','rank_bm25','sentence_transformers','requests','markdown_it','bleach','filelock','onnxruntime','pymysql','cryptography','argon2'); sys.exit(any(importlib.util.find_spec(name) is None for name in names))" >nul 2>&1
+".venv\Scripts\python.exe" -X utf8 -c "import importlib.util,sys; names=('flask','waitress','chromadb','jieba','rank_bm25','sentence_transformers','requests','markdown_it','bleach','filelock','onnxruntime','pymysql','cryptography','argon2','pypdf','PIL','docx','openpyxl','xlrd','charset_normalizer'); sys.exit(any(importlib.util.find_spec(name) is None for name in names))" >nul 2>&1
 if errorlevel 1 goto install_dependencies
 goto run
 :install_dependencies

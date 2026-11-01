@@ -1,0 +1,5 @@
+# PaddleOCR CPU runtime, for scanned/image-only PDF pages.
+--extra-index-url https://www.paddlepaddle.org.cn/packages/stable/cpu/
+paddlepaddle>=3.4,<4
+paddleocr>=3.7,<4
+pypdfium2>=5,<6

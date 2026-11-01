@@ -22,6 +22,7 @@
 
 - [BAAI/bge-small-zh-v1.5](https://huggingface.co/BAAI/bge-small-zh-v1.5)。
 - [Xenova/bge-reranker-base](https://huggingface.co/Xenova/bge-reranker-base)，对应 [BAAI/bge-reranker-base](https://huggingface.co/BAAI/bge-reranker-base) 的 ONNX 版本。
+- 扫描 PDF 的 OCR 依赖 PaddleOCR 扩展；首次识别时按 PaddleOCR 配置下载预训练模型，模型许可和使用条件以 [PaddleOCR 官方项目](https://github.com/PaddlePaddle/PaddleOCR)及模型仓库声明为准。
 
 模型的许可和使用条件以各自仓库的声明为准。Python 依赖由包管理器安装，各依赖保留自身许可证。DeepSeek 与领星服务的使用还应遵循各自服务条款。
 

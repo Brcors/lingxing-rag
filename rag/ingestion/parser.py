@@ -6,6 +6,7 @@ from urllib.parse import urlparse
 
 from rag.types import Document, Section
 from rag.ingestion.fences import closes_fence, opening_fence
+from rag.ingestion.formats import ContentExtractor, SUPPORTED_SUFFIXES
 
 
 def digest(value):
@@ -38,9 +39,10 @@ def title_key(value):
     return re.sub(r'[\s<>:"/\\|?*、]', "", value).casefold()
 
 
-class MarkdownLoader:
+class DocumentLoader:
     def __init__(self, settings):
         self.settings = settings
+        self.extractor = ContentExtractor()
 
     def load(self):
         root = Path(self.settings.docs_dir)
@@ -64,18 +66,24 @@ class MarkdownLoader:
             state = json.loads(sync_file.read_text(encoding="utf-8"))
             if state.get("source", {}).get("docs_dir") == str(root.resolve()):
                 sync_metadata = state.get("files", {})
-        for path in sorted(root.rglob("*.md")):
-            if path.name.lower() == "index.md" or any(p.startswith(".") for p in path.relative_to(root).parts):
+        for path in sorted(root.rglob("*")):
+            if not path.is_file() or path.suffix.lower() not in SUPPORTED_SUFFIXES:
+                continue
+            if (path.name.lower() == "index.md" or
+                    any(p.startswith(".") for p in path.relative_to(root).parts)):
                 continue
             relative = path.relative_to(root).as_posix()
             category = relative.rsplit("/", 1)[0] if "/" in relative else "General"
-            raw_content = path.read_bytes()
-            content = raw_content.decode("utf-8-sig").replace("\r\n", "\n").strip()
+            raw_content = path.read_bytes() if path.suffix.lower() == ".md" else b""
+            try:
+                content = self.extractor.extract(path).replace("\r\n", "\n").strip()
+            except Exception as error:
+                raise RuntimeError(f"解析知识库文档失败：{relative}：{error}") from error
             if not content:
                 continue
             document = self.parse(content, relative, category, lookup.get((category, path.stem), ""))
             metadata = sync_metadata.get(relative, {})
-            if metadata.get("sha"):
+            if path.suffix.lower() == ".md" and metadata.get("sha"):
                 raw_sha = hashlib.sha1(b"blob " + str(len(raw_content)).encode() + b"\0" + raw_content).hexdigest()
                 normalized = raw_content.replace(b"\r\n", b"\n")
                 normalized_sha = hashlib.sha1(b"blob " + str(len(normalized)).encode() + b"\0" + normalized).hexdigest()
@@ -96,10 +104,20 @@ class MarkdownLoader:
             documents.append(document)
         supplements = Path(self.settings.supplement_dir)
         if supplements.is_dir():
-            for path in sorted(supplements.glob("*.md")):
-                content = path.read_text(encoding="utf-8-sig").strip()
+            for path in sorted(supplements.rglob("*")):
+                if not path.is_file() or path.suffix.lower() not in SUPPORTED_SUFFIXES:
+                    continue
+                if any(part.startswith(".") for part in path.relative_to(supplements).parts):
+                    continue
+                relative = "补充说明/" + path.relative_to(supplements).as_posix()
+                try:
+                    content = self.extractor.extract(path).strip()
+                except Exception as error:
+                    raise RuntimeError(f"解析补充知识失败：{path.name}：{error}") from error
+                if not content:
+                    continue
                 source = re.search(r"^来源：\s*(https?://\S+)", content, flags=re.M)
-                documents.append(self.parse(content, "补充说明/" + path.name, "接入指引",
+                documents.append(self.parse(content, relative, "接入指引",
                                             safe_url(source.group(1)) if source else "", verified=True))
         return documents
 
@@ -154,3 +172,7 @@ class MarkdownLoader:
                         digest(content), content, sections,
                         is_legacy=bool(re.search(r"（旧）|\(旧\)|已废弃|已弃用", title)),
                         verified_update=verified)
+
+
+# Preserve the old import name for projects that used the original Markdown-only loader.
+MarkdownLoader = DocumentLoader
