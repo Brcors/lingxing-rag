@@ -9,6 +9,12 @@ import config
 class Settings:
     project_dir: Path = config.PROJECT_DIR
     docs_dir: Path = config.DOCS_DIR
+    doc_sync_enabled: bool = config.DOC_SYNC_ENABLED
+    doc_sync_repository: str = config.DOC_SYNC_REPOSITORY
+    doc_sync_branch: str = config.DOC_SYNC_BRANCH
+    doc_sync_subdirectory: str = config.DOC_SYNC_SUBDIRECTORY
+    doc_sync_base_revision: str = config.DOC_SYNC_BASE_REVISION
+    doc_sync_interval: int = config.DOC_SYNC_INTERVAL_SECONDS
     supplement_dir: Path = config.SUPPLEMENT_DIR
     data_dir: Path = config.DATA_DIR
     model_dir: Path = config.MODEL_DIR
@@ -59,6 +65,17 @@ class Settings:
         return cls(api_key=environment_key or config.DEEPSEEK_API_KEY.strip())
 
     def validate(self):
+        if self.doc_sync_enabled:
+            import re
+            from pathlib import PurePosixPath
+            sub = PurePosixPath(self.doc_sync_subdirectory)
+            if (not re.fullmatch(r"[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+", self.doc_sync_repository)
+                    or not self.doc_sync_branch or not self.doc_sync_subdirectory
+                    or sub.is_absolute() or ".." in sub.parts or "\\" in self.doc_sync_subdirectory
+                    or self.doc_sync_interval < 60):
+                raise ValueError("文档同步来源或检查间隔配置不合法（最小 60 秒）。")
+            if self.doc_sync_base_revision and not re.fullmatch(r"[a-f0-9]{40}", self.doc_sync_base_revision):
+                raise ValueError("文档同步初始版本必须为空或完整的 Git 提交 SHA。")
         if not (64 <= self.chunk_target <= self.chunk_max <= 480):
             raise ValueError("切块参数需要满足 64 ≤ target ≤ max ≤ 480。")
         if not 0 <= self.overlap < self.chunk_target // 2:

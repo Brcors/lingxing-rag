@@ -25,7 +25,7 @@ class QuestionDecomposer:
         self.settings = settings
         self.llm = llm
 
-    def decompose(self, question, history=None):
+    def decompose(self, question, history=None, cancel_token=None):
         if (not self.settings.query_decomposition_enabled or not self.settings.api_key or
                 not should_decompose(question)):
             return [], None
@@ -53,13 +53,17 @@ class QuestionDecomposer:
             {"role": "user", "content": payload},
         ]
         try:
+            extra = {"cancel_token": cancel_token} if cancel_token else {}
             raw = self.llm.complete(
                 messages,
                 max_tokens=self.settings.query_decomposition_max_tokens,
                 temperature=0.0,
+                **extra,
             )
             return self._parse(raw, question), None
         except Exception:
+            if cancel_token:
+                cancel_token.check()
             logger.warning("多步骤问题拆解失败，回退原问题检索。", exc_info=True)
             return [], "问题拆解暂不可用，本次将按原问题检索。"
 

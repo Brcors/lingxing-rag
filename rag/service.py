@@ -169,18 +169,23 @@ class RAGService:
             notices.append("模型未逐条标注引用，请结合下方文档核对回答。")
         return answer, notices
 
-    def events(self, question, category=None, history=None, retrieve_only=False, memory_summary="", retrieval_hint="", allow_feedback=True):
+    def events(self, question, category=None, history=None, retrieve_only=False, memory_summary="", retrieval_hint="", allow_feedback=True, cancel_token=None):
         start = time.monotonic()
+        if cancel_token:
+            cancel_token.check()
         # 摘要刚整理完成时，保留上一问题作为检索指代线索；不重复发送整组旧问答。
         retrieval_history = history or ([{"role": "user", "content": retrieval_hint}] if retrieval_hint else [])
         extra_queries, decomposition_notice = [], None
         if (not retrieve_only and self.settings.api_key and self.settings.query_decomposition_enabled
                 and should_decompose(question)):
             yield {"type": "status", "message": "正在拆解多步骤问题…"}
-            extra_queries, decomposition_notice = self.decomposer.decompose(question, retrieval_history)
+            extra = {"cancel_token": cancel_token} if cancel_token else {}
+            extra_queries, decomposition_notice = self.decomposer.decompose(question, retrieval_history, **extra)
         message = "正在检索并进行本地重排序…" if self.settings.rerank_enabled else "正在检索接口文档…"
         yield {"type": "status", "message": message}
         bundle, stats = self.retrieve(question, category, retrieval_history, extra_queries=extra_queries)
+        if cancel_token:
+            cancel_token.check()
         if decomposition_notice:
             bundle.notices.append(decomposition_notice)
         yield {"type": "sources", "sources": bundle.sources, "notices": bundle.notices, "stats": stats}
@@ -195,11 +200,21 @@ class RAGService:
         else:
             yield {"type": "status", "message": "正在生成回答…"}
             parts = []
-            for token in self.llm.stream(build_messages(question, bundle, history, memory_summary)):
-                parts.append(token)
-                yield {"type": "token", "text": token}
+            extra = {"cancel_token": cancel_token} if cancel_token else {}
+            stream = self.llm.stream(build_messages(question, bundle, history, memory_summary), **extra)
+            try:
+                for token in stream:
+                    if cancel_token:
+                        cancel_token.check()
+                    parts.append(token)
+                    yield {"type": "token", "text": token}
+            finally:
+                if hasattr(stream, "close"):
+                    stream.close()
             answer = "".join(parts)
             generated = True
+        if cancel_token:
+            cancel_token.check()
         answer, notices = self.check_citations(answer, bundle) if self.settings.api_key and not retrieve_only else (answer, [])
         feedback_id = (self.feedback_kb.register_answer(question, answer, bundle.sources, category)
                        if generated and self.settings.mysql_enabled and allow_feedback else None)

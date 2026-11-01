@@ -16,6 +16,12 @@ def create_app(settings=None, service=None, accounts=None, memory=None, guests=N
     settings.validate()
     app.extensions["rag_settings"] = settings
     app.extensions["rag_service"] = service or RAGService(settings)
+    from rag.generation.cancellation import GenerationRegistry
+    app.extensions["generations"] = GenerationRegistry()
+    from rag.document_sync import DocumentSync
+    from rag.indexing.builder import IndexBuilder
+    app.extensions["document_sync"] = DocumentSync(settings, indexer=lambda progress:
+        IndexBuilder(settings, app.extensions["rag_service"].embedding).build(progress=progress))
     app.extensions["accounts"] = accounts or AccountRepository(settings)
     app.extensions["memory"] = memory or MemoryManager(
         app.extensions["accounts"], getattr(app.extensions["rag_service"], "llm", None) or DeepSeekClient(settings),

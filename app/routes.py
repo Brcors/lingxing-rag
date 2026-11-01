@@ -10,6 +10,7 @@ from filelock import Timeout
 
 from app.rendering import render_markdown
 from rag.generation.client import LLMError
+from rag.generation.cancellation import GenerationCancelled
 from rag.indexing.builder import IndexBuilder
 from rag.indexing.store import CorpusStore
 from rag.knowledge.mysql_repository import KnowledgeStoreError
@@ -69,22 +70,36 @@ def memory_manager():
     return current_app.extensions["guest_memory" if g.user.get("is_guest") else "memory"]
 
 
-def conversation_events(args):
+def generation_key(conversation_id, request_id):
+    return ("guest" if g.user.get("is_guest") else "account", str(g.user["id"]), conversation_id, request_id)
+
+
+def conversation_events(args, cancel_token=None):
     question, category, retrieve_only, conversation_id, request_id = args
     repo, rag_service = accounts(), service()
     memory = memory_manager()
     is_guest = g.user.get("is_guest", False)
     user_id = g.user["id"]
+    if cancel_token:
+        cancel_token.check()
     token = repo.acquire(user_id, conversation_id)
+    events = None
     try:
+        if cancel_token:
+            cancel_token.bind_lease(lambda: repo.release(user_id, conversation_id, token))
+            cancel_token.check()
         previous = repo.find_request(user_id, conversation_id, request_id)
         if previous:
             yield previous
             return
         context = repo.context(user_id, conversation_id)
-        for event in rag_service.events(question, category, context["history"], retrieve_only,
+        extra = {"cancel_token": cancel_token} if cancel_token else {}
+        events = rag_service.events(question, category, context["history"], retrieve_only,
                                         memory_summary=context["summary"], retrieval_hint=context.get("retrieval_hint", ""),
-                                        allow_feedback=not is_guest):
+                                        allow_feedback=not is_guest, **extra)
+        for event in events:
+            if cancel_token:
+                cancel_token.check()
             if event["type"] == "done":
                 event = {**event, "conversation_id": conversation_id,
                          "memory_version": context["memory_version"]}
@@ -101,9 +116,15 @@ def conversation_events(args):
             yield event
     finally:
         try:
-            repo.release(user_id, conversation_id, token)
+            if cancel_token:
+                cancel_token.cancel()
+            else:
+                repo.release(user_id, conversation_id, token)
         except AccountStoreError:
             logger.exception("释放对话锁失败，将在租约到期后自动恢复")
+        finally:
+            if events is not None and hasattr(events, "close"):
+                events.close()
 
 
 def format_event(event):
@@ -119,12 +140,51 @@ def index():
 
 @api.get("conversations")
 def list_conversations():
-    return jsonify(conversations=accounts().list_conversations(g.user["id"]))
+    query = request.args.get("q", "").strip()
+    if len(query) > 200:
+        return jsonify(error="搜索关键词请控制在 200 字符以内。"), 400
+    return jsonify(conversations=accounts().list_conversations(g.user["id"], query))
 
 
 @api.post("conversations")
 def create_conversation():
     return jsonify(accounts().create_conversation(g.user["id"])), 201
+
+
+@api.patch("conversations/<conversation_id>")
+def rename_conversation(conversation_id):
+    data = request.get_json(silent=True)
+    try:
+        return jsonify(accounts().rename_conversation(g.user["id"], conversation_id,
+                                                     data.get("title") if isinstance(data, dict) else None))
+    except ValueError as error:
+        return jsonify(error=str(error)), 400
+
+
+@api.delete("conversations/<conversation_id>")
+def delete_conversation(conversation_id):
+    replacement = accounts().delete_conversation(g.user["id"], conversation_id)
+    return jsonify(ok=True, replacement=replacement)
+
+
+@api.get("conversations/<conversation_id>/export")
+def export_conversation(conversation_id):
+    content = accounts().export_markdown(g.user["id"], conversation_id)
+    return Response(stream_with_context(content), content_type="text/markdown; charset=utf-8",
+                    headers={"Content-Disposition": f'attachment; filename="conversation-{conversation_id}.md"'})
+
+
+@api.post("conversations/<conversation_id>/cancel")
+def cancel_generation(conversation_id):
+    data = request.get_json(silent=True)
+    request_id = data.get("request_id") if isinstance(data, dict) else None
+    if not isinstance(request_id, str) or not re.fullmatch(r"[a-zA-Z0-9-]{20,36}", request_id):
+        return jsonify(error="提问标识无效。"), 400
+    accounts().assert_owned(g.user["id"], conversation_id)
+    if accounts().find_request(g.user["id"], conversation_id, request_id):
+        return jsonify(cancelled=False, already_completed=True)
+    active = current_app.extensions["generations"].cancel(generation_key(conversation_id, request_id))
+    return jsonify(cancelled=True, was_running=active)
 
 
 @api.get("conversations/<conversation_id>")
@@ -165,7 +225,36 @@ def status():
         "categories": sorted({c.split("/")[0] for c in active["categories"]}) if active else [],
         "built_at": active.get("built_at") if active else None,
         "job": dict(_job),
+        "document_sync": current_app.extensions["document_sync"].status(),
     })
+
+
+@api.get("documents/versions")
+def document_versions():
+    manager = current_app.extensions["document_sync"]
+    versions = []
+    for item in manager.history():
+        record = dict(item)
+        record["counts"] = {key: len(item.get(key, [])) for key in ("added", "modified", "deleted")}
+        for key in record["counts"]:
+            record[key] = item.get(key, [])[:30]
+        versions.append(record)
+    return jsonify(status=manager.status(), versions=versions)
+
+
+@api.post("documents/sync")
+def sync_documents():
+    if g.user.get("is_guest"):
+        return jsonify(error="游客不能同步共享文档。"), 403
+    manager = current_app.extensions["document_sync"]
+    if not settings().doc_sync_enabled:
+        return jsonify(error="自动文档同步已关闭，请在本机配置中启用。"), 503
+    data = request.get_json(silent=True)
+    if not isinstance(data, dict) or not isinstance(data.get("check_only", False), bool):
+        return jsonify(error="同步请求格式不合法。"), 400
+    if not manager.trigger(check_only=data.get("check_only", False)):
+        return jsonify(error="文档同步正在进行。"), 409
+    return jsonify(message="已开始检查文档。" if data.get("check_only") else "已开始同步文档并更新索引。"), 202
 
 
 @api.post("ask")
@@ -193,12 +282,17 @@ def ask_stream():
         args = read_question()
     except ValueError as error:
         return jsonify(error=str(error)), 400
+    registry = current_app.extensions["generations"]
+    key = generation_key(args[3], args[4])
+    control = registry.start(key)
 
     @stream_with_context
     def generate():
         try:
-            for event in conversation_events(args):
+            for event in conversation_events(args, control):
                 yield format_event(event)
+        except GenerationCancelled:
+            yield format_event({"type": "cancelled", "message": "已停止生成，未完成的回答不会保存。"})
         except (AccountStoreError, ConversationNotFound, ConversationBusy) as error:
             yield format_event({"type": "error", "message": str(error)})
         except (ValueError, FileNotFoundError, LLMError) as error:
@@ -206,8 +300,12 @@ def ask_stream():
         except Exception:
             logger.exception("流式问答处理失败")
             yield format_event({"type": "error", "message": "处理失败，请查看启动窗口中的错误信息后重试。"})
+        finally:
+            registry.finish(key, control)
 
-    return Response(generate(), mimetype="application/x-ndjson", headers={"X-Accel-Buffering": "no"})
+    response = Response(generate(), mimetype="application/x-ndjson", headers={"X-Accel-Buffering": "no"})
+    response.call_on_close(lambda: registry.finish(key, control))
+    return response
 
 
 @api.post("feedback")

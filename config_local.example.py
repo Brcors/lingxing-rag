@@ -9,3 +9,7 @@ MYSQL_PORT = 3306
 MYSQL_USER = "lingxing_rag"
 MYSQL_PASSWORD = ""
 MYSQL_DATABASE = "lingxing_rag"
+
+# 启动后每小时检查现有 GitHub 文档源；改为 False 可关闭后台同步。
+DOC_SYNC_ENABLED = True
+DOC_SYNC_INTERVAL_SECONDS = 3600

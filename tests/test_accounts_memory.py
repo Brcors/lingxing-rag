@@ -48,7 +48,7 @@ class FakeService:
         self.feedback_kb = FakeFeedback(settings)
         self.calls = []
 
-    def events(self, question, category, history, retrieve_only, memory_summary="", retrieval_hint="", allow_feedback=True):
+    def events(self, question, category, history, retrieve_only, memory_summary="", retrieval_hint="", allow_feedback=True, cancel_token=None):
         self.last_allow_feedback = allow_feedback
         self.calls.append((question, history, memory_summary))
         yield {"type": "done", "answer": f"回答 {question}", "sources": [], "notices": [],

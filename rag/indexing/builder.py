@@ -33,7 +33,8 @@ class IndexBuilder:
             signature = self.embedding.signature()
             hashes = {document.relative_path: document.content_hash for document in documents}
             sources = {d.document_id: d.source_url for d in documents}
-            fingerprint = hashlib.sha256(json.dumps([signature, hashes, sources, "storage-v3-fences"], sort_keys=True).encode()).hexdigest()
+            versions = {d.document_id: [d.source_revision, d.updated_at, d.synced_at, d.update_basis] for d in documents}
+            fingerprint = hashlib.sha256(json.dumps([signature, hashes, sources, versions, "storage-v4-freshness"], sort_keys=True).encode()).hexdigest()
             old = self.store.active()
             vectors = VectorStore(self.settings)
             if not force and old and old.get("fingerprint") == fingerprint:

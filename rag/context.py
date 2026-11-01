@@ -111,6 +111,8 @@ class ContextBuilder:
                 "method": document.method, "heading": item["heading"], "source_url": document.source_url,
                 "relative_path": document.relative_path, "excerpt": item["evidence"], "channels": item["channels"],
                 "verified_update": document.verified_update,
+                "source_revision": document.source_revision, "updated_at": document.updated_at,
+                "synced_at": document.synced_at, "update_basis": document.update_basis,
             })
         if len(packed) < len(units):
             notices.append("部分候选证据未能放入本次上下文预算，可缩小问题范围后继续查询。")

@@ -44,6 +44,21 @@ Copy-Item config_local.example.py config_local.py
 
 ## 启动和停止
 
+### 文档同步配置
+
+`run.py` 会启动后台检查线程，默认每小时检查已配置的 GitHub 文档源。手动执行同步命令或点击页面按钮会立即检查。`create_app()` 作为自定义 WSGI 入口时，需要自行调用 `app.extensions["document_sync"].start()` 才会启用定时检查。
+
+- `DOC_SYNC_ENABLED`：是否启用后台和页面同步入口，默认 `True`。
+- `DOC_SYNC_REPOSITORY`、`DOC_SYNC_BRANCH`、`DOC_SYNC_SUBDIRECTORY`：文档仓库、分支和子目录。
+- `DOC_SYNC_BASE_REVISION`：现有文档快照的完整初始提交，用于首次检查本地修改；接入自有来源且没有初始提交时可设为空。
+- `DOC_SYNC_INTERVAL_SECONDS`：检查间隔，默认 3600，最小 60。
+
+切换来源或文档目录时，请使用独立的 `DATA_DIR`，避免混用旧版本记录和索引。同步只处理 Markdown 和根目录 `tasks.json`；本地额外的笔记保留。每个版本的完整增删改清单与修改前备份保存在 `data/document-sync/versions/`。
+
+后台同步依赖 GitHub 公共 API 的网络与限额，失败信息会显示在侧栏。现有索引继续提供检索。文档版本时间采用上游提交时间，不代表官方发布日期。
+
+### Web 服务
+
 ```powershell
 .\start.bat
 .\start.bat --no-browser

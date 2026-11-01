@@ -24,6 +24,10 @@ class Document:
     sections: list[Section]
     is_legacy: bool = False
     verified_update: bool = False
+    source_revision: str = ""
+    updated_at: str = ""
+    synced_at: str = ""
+    update_basis: str = ""
 
     def to_dict(self):
         return asdict(self)

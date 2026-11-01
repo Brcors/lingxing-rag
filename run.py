@@ -59,6 +59,7 @@ def main():
             except Exception:
                 logging.exception("重排序模型预热失败；检索时会重试，失败则回退混合检索顺序。")
     print(f"\n领星文档问答已就绪：{url}", flush=True)
+    app.extensions["document_sync"].start()
     if not settings.api_key:
         print("尚未填写 API key；可先在页面使用检索预览。填写 config.py 后重启即可生成回答。", flush=True)
     if config.OPEN_BROWSER and not args.no_browser:

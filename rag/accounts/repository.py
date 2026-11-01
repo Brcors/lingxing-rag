@@ -122,11 +122,54 @@ class AccountRepository:
                         (conversation_id, user_id, "新对话"))
         return {"id": conversation_id, "title": "新对话"}
 
-    def list_conversations(self, user_id):
+    def list_conversations(self, user_id, query=""):
         with self.connection() as conn, conn.cursor() as cur:
-            cur.execute(f"""SELECT id,title,created_at,updated_at,memory_version FROM chat_conversations
-                           WHERE {self.owner_column}=%s ORDER BY updated_at DESC LIMIT 200""", (user_id,))
+            sql = f"""SELECT id,title,created_at,updated_at,memory_version FROM chat_conversations c
+                       WHERE c.{self.owner_column}=%s"""
+            args = [user_id]
+            if query:
+                term = "%" + query.replace("!", "!!").replace("%", "!%").replace("_", "!_") + "%"
+                sql += f""" AND (c.title LIKE %s ESCAPE '!' OR EXISTS (
+                    SELECT 1 FROM {self.turn_table} t WHERE t.conversation_id=c.id
+                    AND (t.question LIKE %s ESCAPE '!' OR t.answer LIKE %s ESCAPE '!')))"""
+                args.extend([term, term, term])
+            cur.execute(sql + " ORDER BY updated_at DESC,id DESC LIMIT 200", args)
             return cur.fetchall()
+
+    def assert_owned(self, user_id, conversation_id):
+        with self.connection() as conn, conn.cursor() as cur:
+            return self.owned(cur, user_id, conversation_id)
+
+    def rename_conversation(self, user_id, conversation_id, title):
+        if not isinstance(title, str) or not title.strip() or len(title.strip()) > 100 or any(ord(c) < 32 for c in title):
+            raise ValueError("对话名称需为 1–100 个字符，不能包含换行或控制字符。")
+        title = title.strip()
+        with self.connection() as conn, conn.cursor() as cur:
+            self.owned(cur, user_id, conversation_id, lock=True)
+            cur.execute("UPDATE chat_conversations SET title=%s,updated_at=UTC_TIMESTAMP(6) WHERE id=%s",
+                        (title, conversation_id))
+        return {"id": conversation_id, "title": title}
+
+    def _delete_owned(self, cur, user_id, conversation_id):
+        self.owned(cur, user_id, conversation_id, lock=True)
+        cur.execute("SELECT busy_until>UTC_TIMESTAMP() AS busy FROM chat_conversations WHERE id=%s", (conversation_id,))
+        if cur.fetchone()["busy"]:
+            raise ConversationBusy("该对话正在生成回答，请先停止生成再删除。")
+        cur.execute("DELETE FROM chat_conversations WHERE id=%s", (conversation_id,))
+
+    def delete_conversation(self, user_id, conversation_id):
+        with self.connection() as conn, conn.cursor() as cur:
+            self._delete_owned(cur, user_id, conversation_id)
+        return None
+
+    def export_markdown(self, user_id, conversation_id):
+        from rag.accounts.export import markdown_export
+        with self.connection() as conn, conn.cursor() as cur:
+            row = self.owned(cur, user_id, conversation_id)
+            cur.execute(f"SELECT COALESCE(MAX(id),0) AS last_id FROM {self.turn_table} WHERE conversation_id=%s",
+                        (conversation_id,))
+            last_id = cur.fetchone()["last_id"]
+        return markdown_export(self, user_id, conversation_id, row["title"], last_id)
 
     def owned(self, cur, user_id, conversation_id, lock=False):
         cur.execute(f"SELECT * FROM chat_conversations WHERE id=%s AND {self.owner_column}=%s" +

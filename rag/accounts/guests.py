@@ -59,6 +59,21 @@ class GuestRepository(AccountRepository):
             cur.execute("DELETE FROM chat_conversations WHERE guest_session_id=%s", (guest_id,))
             return cur.rowcount
 
+    def delete_conversation(self, guest_id, conversation_id):
+        with self.connection() as conn, conn.cursor() as cur:
+            cur.execute("SELECT id FROM chat_conversations WHERE guest_session_id=%s ORDER BY id FOR UPDATE", (guest_id,))
+            cur.fetchall()
+            self._delete_owned(cur, guest_id, conversation_id)
+            cur.execute("SELECT id FROM chat_conversations WHERE guest_session_id=%s LIMIT 1", (guest_id,))
+            if cur.fetchone():
+                return None
+            # 留下一条空白对话作为游客身份锚点，避免删除最后一条后退出游客身份。
+            replacement = {"id": secrets.token_hex(16), "title": "新对话"}
+            cur.execute("""INSERT INTO chat_conversations(id,user_id,guest_session_id,title,expires_at)
+                           VALUES(%s,NULL,%s,%s,DATE_ADD(UTC_TIMESTAMP(6),INTERVAL 24 HOUR))""",
+                        (replacement["id"], guest_id, replacement["title"]))
+            return replacement
+
     def cleanup_expired(self):
         with self.connection() as conn, conn.cursor() as cur:
             cur.execute("""DELETE FROM chat_conversations WHERE guest_session_id IS NOT NULL

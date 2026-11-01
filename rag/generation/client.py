@@ -1,7 +1,9 @@
 import json
 import time
+import threading
 
 import requests
+from rag.generation.cancellation import CancellationToken, call_cancellable, iter_cancellable
 
 
 class LLMError(RuntimeError):
@@ -23,25 +25,37 @@ class DeepSeekClient:
             "stream": stream,
         }
 
-    def _open(self, messages, stream, max_tokens=None, temperature=None):
+    def _open(self, messages, stream, max_tokens=None, temperature=None, cancel_token=None):
         if not self.settings.api_key:
             raise LLMError("请在 config.py 的 DEEPSEEK_API_KEY 中填写 API key，保存并重启服务。")
         url = self.settings.base_url.rstrip("/") + "/chat/completions"
         headers = {"Content-Type": "application/json", "Authorization": "Bearer " + self.settings.api_key}
         for attempt in range(3):
+            if cancel_token:
+                cancel_token.check()
             try:
-                response = requests.post(url, headers=headers,
+                response = call_cancellable(lambda: requests.post(url, headers=headers,
                                          json=self.payload(messages, stream, max_tokens, temperature),
-                                         timeout=(10, self.settings.timeout), stream=stream)
+                                         timeout=(10, self.settings.timeout), stream=stream or bool(cancel_token)),
+                                            cancel_token, response=True)
             except requests.ConnectTimeout:
+                if cancel_token:
+                    cancel_token.check()
                 if attempt < 2:
                     time.sleep(0.5 * (attempt + 1))
                     continue
                 raise LLMError("无法连接 DeepSeek，请检查网络后重试。") from None
             except requests.ReadTimeout:
+                if cancel_token:
+                    cancel_token.check()
                 raise LLMError("等待 DeepSeek 响应超时；请求可能已被处理，请稍后手动重试。") from None
             except requests.RequestException:
+                if cancel_token:
+                    cancel_token.check()
                 raise LLMError("DeepSeek 连接失败或已中断，请检查网络后手动重试。") from None
+            if cancel_token and cancel_token.event.is_set():
+                response.close()
+                cancel_token.check()
             if response.status_code in (429, 500, 502, 503, 504) and attempt < 2:
                 response.close()
                 time.sleep(0.5 * (attempt + 1))
@@ -56,28 +70,54 @@ class DeepSeekClient:
             return response
         raise LLMError("DeepSeek 服务暂时不可用。")
 
-    def complete(self, messages, max_tokens=None, temperature=None):
-        with self._open(messages, False, max_tokens, temperature) as response:
+    def complete(self, messages, max_tokens=None, temperature=None, cancel_token=None):
+        # 可取消请求先只打开响应头，再读取正文，便于关闭连接。
+        response = self._open(messages, False, max_tokens, temperature, cancel_token)
+        try:
+            if cancel_token:
+                cancel_token.add_response(response)
             try:
-                data = response.json()
+                data = call_cancellable(response.json, cancel_token)
                 answer = data["choices"][0]["message"]["content"]
                 finish = data["choices"][0].get("finish_reason")
                 if not isinstance(answer, str) or not answer.strip():
                     raise ValueError()
-            except (ValueError, KeyError, IndexError, TypeError):
+            except (ValueError, KeyError, IndexError, TypeError, requests.RequestException):
+                if cancel_token:
+                    cancel_token.check()
                 raise LLMError("DeepSeek 返回了无法解析或为空的回答。") from None
+            finally:
+                if cancel_token:
+                    cancel_token.remove_response(response)
+            if cancel_token:
+                cancel_token.check()
             if finish not in (None, "stop", "length"):
                 raise LLMError("DeepSeek 未正常完成回答，请稍后重试。")
             if finish == "length":
                 answer += "\n\n> 本次回答达到生成长度上限，可缩小问题范围后继续提问。"
             return answer
+        finally:
+            self._close_response(response, cancel_token)
 
-    def stream(self, messages):
-        response = self._open(messages, True)
+    @staticmethod
+    def _close_response(response, cancel_token):
+        if cancel_token:
+            cancel_token.remove_response(response)
+            threading.Thread(target=CancellationToken._close, args=(response,), daemon=True).start()
+        else:
+            response.close()
+
+    def stream(self, messages, cancel_token=None):
+        response = self._open(messages, True, cancel_token=cancel_token)
         response.encoding = "utf-8"
         received, finished = False, False
+        lines = iter_cancellable(response.iter_lines(chunk_size=1024, decode_unicode=True), cancel_token)
         try:
-            for line in response.iter_lines(chunk_size=1024, decode_unicode=True):
+            if cancel_token:
+                cancel_token.add_response(response)
+            for line in lines:
+                if cancel_token:
+                    cancel_token.check()
                 if not line or not line.startswith("data:"):
                     continue
                 value = line[5:].strip()
@@ -112,11 +152,16 @@ class DeepSeekClient:
                     yield "\n\n> 本次回答达到生成长度上限，可缩小问题范围后继续提问。"
                 if choice.get("finish_reason") is not None:
                     finished = True
+            if cancel_token:
+                cancel_token.check()
             if not finished:
                 raise LLMError("DeepSeek 连接提前结束，已收到的内容可能不完整，请重试。")
             if not received:
                 raise LLMError("DeepSeek 未返回回答内容，请重试。")
         except requests.RequestException:
+            if cancel_token:
+                cancel_token.check()
             raise LLMError("DeepSeek 响应中断，已收到的内容可能不完整，请重试。") from None
         finally:
-            response.close()
+            lines.close()
+            self._close_response(response, cancel_token)

@@ -58,15 +58,33 @@ class MarkdownLoader:
                 if url:
                     normalized_lookup.setdefault((category, title_key(title)), set()).add(url)
         documents = []
+        sync_file = self.settings.data_dir / "document-sync" / "state.json"
+        sync_metadata = {}
+        if sync_file.exists():
+            state = json.loads(sync_file.read_text(encoding="utf-8"))
+            if state.get("source", {}).get("docs_dir") == str(root.resolve()):
+                sync_metadata = state.get("files", {})
         for path in sorted(root.rglob("*.md")):
             if path.name.lower() == "index.md" or any(p.startswith(".") for p in path.relative_to(root).parts):
                 continue
             relative = path.relative_to(root).as_posix()
             category = relative.rsplit("/", 1)[0] if "/" in relative else "General"
-            content = path.read_text(encoding="utf-8-sig").strip()
+            raw_content = path.read_bytes()
+            content = raw_content.decode("utf-8-sig").replace("\r\n", "\n").strip()
             if not content:
                 continue
             document = self.parse(content, relative, category, lookup.get((category, path.stem), ""))
+            metadata = sync_metadata.get(relative, {})
+            if metadata.get("sha"):
+                raw_sha = hashlib.sha1(b"blob " + str(len(raw_content)).encode() + b"\0" + raw_content).hexdigest()
+                normalized = raw_content.replace(b"\r\n", b"\n")
+                normalized_sha = hashlib.sha1(b"blob " + str(len(normalized)).encode() + b"\0" + normalized).hexdigest()
+                if metadata["sha"] not in (raw_sha, normalized_sha):
+                    metadata = {}  # 本地改写后，不再标注为已同步的来源版本。
+            document.source_revision = metadata.get("source_revision", "")
+            document.updated_at = metadata.get("updated_at", "")
+            document.synced_at = metadata.get("synced_at", "")
+            document.update_basis = metadata.get("date_basis", "")
             if not document.source_url:
                 document.source_url = lookup.get((category, document.title), "")
             if not document.source_url:

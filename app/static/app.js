@@ -3,6 +3,8 @@ const $ = (id) => document.getElementById(id);
 let busy = false;
 let activeConversation = null;
 let olderBefore = null;
+let currentGeneration = null;
+let conversationListSequence = 0;
 const isGuest = document.querySelector('meta[name="user-mode"]')?.content === "guest";
 const conversationKey = `lingxing-conversation-${document.querySelector('meta[name="user-id"]').content}`;
 async function secureFetch(url, options = {}) {
@@ -27,8 +29,12 @@ function setBusy(value) {
   $("clear-chat").disabled = value;
   $("category").disabled = value;
   $("new-conversation").disabled = value;
+  $("conversation-search").disabled = value;
   $("older-turns").disabled = value;
   $("logout").disabled = value;
+  for (const id of ["rename-conversation", "export-conversation", "delete-conversation"]) $(id).disabled = value || !activeConversation;
+  $("stop-generation").classList.toggle("hidden", !value || !currentGeneration);
+  $("stop-generation").disabled = !currentGeneration || !!currentGeneration.stopping;
   document.querySelectorAll(".conversation-choice").forEach(button => { button.disabled = value; });
   $("retrieve-only").disabled = value;
   document.querySelectorAll("[data-question]").forEach((button) => { button.disabled = value; });
@@ -48,9 +54,17 @@ async function loadStatus() {
     currentStatus = status;
     $("index-label").textContent = status.index_ready ? `${status.document_count} 篇文档已就绪` : "文档库等待建立索引";
     $("index-detail").textContent = status.job.running ? status.job.message : `${status.chunk_count} 个可检索片段 · ${status.rerank_enabled ? "已启用本地重排序" : "本地知识库"}`;
-    $("update-index").disabled = isGuest || status.job.running;
+    const sync = status.document_sync || {};
+    $("update-index").disabled = isGuest || status.job.running || sync.running;
+    $("check-docs").disabled = isGuest || !sync.enabled || sync.running;
+    $("sync-docs").disabled = isGuest || !sync.enabled || sync.running || status.job.running;
+    const countChanges = changes => Object.values(changes || {}).reduce((sum, paths) => sum + (Array.isArray(paths) ? paths.length : 0), 0);
+    $("sync-status").textContent = sync.running ? sync.message : sync.error || sync.last_error ||
+      (!sync.enabled ? "自动同步已关闭" : `每 ${Math.round((sync.interval_seconds || 3600) / 60)} 分钟检查 · 最近检查：${formatDate(sync.checked_at)}`);
+    const available = sync.available_changes_counts ? Object.values(sync.available_changes_counts).reduce((a, b) => a + b, 0) : countChanges(sync.available_changes);
+    if (!sync.running && available) $("sync-status").textContent += ` · 发现 ${available} 处变化待同步`;
     if (!status.llm_configured) {
-      $("config-notice").textContent = "填写 config.py 中的 DEEPSEEK_API_KEY 并重启后，即可生成回答。当前可使用检索预览。";
+      $("config-notice").textContent = "在 config_local.py 中配置 DEEPSEEK_API_KEY 并重启后，即可生成回答。当前可使用检索预览。";
       $("config-notice").classList.remove("hidden");
     } else { $("config-notice").classList.add("hidden"); }
     const selected = $("category").value;
@@ -60,17 +74,16 @@ async function loadStatus() {
       if (status.categories.includes(selected)) $("category").value = selected;
     }
     if (status.job.error) showError(status.job.error);
-    if (status.job.running && !statusTimer) {
-      statusTimer = setInterval(loadStatus, 1600);
-    } else if (!status.job.running && statusTimer) {
-      clearInterval(statusTimer); statusTimer = null;
-    }
+    if (!statusTimer) statusTimer = setInterval(loadStatus, 5000);
+    if ($("sync-history").open) await loadDocumentHistory();
   } catch (error) { $("index-label").textContent = "服务连接失败"; showError(error.message); }
 }
 
 function showSources(container, sources, turnId) {
   const details = node("details", "sources");
-  details.append(node("summary", "", `依据与参考 · ${sources.length} 处来源`));
+  const dates = [...new Set(sources.map(source => source.updated_at?.slice(0, 10)).filter(Boolean))].sort();
+  const freshness = dates.length ? ` · 资料版本 ${dates[0]}${dates.length > 1 ? `～${dates.at(-1)}` : ""}` : "";
+  details.append(node("summary", "", `依据与参考 · ${sources.length} 处来源${freshness}`));
   for (const source of sources) {
     const item = node("div", "source-item");
     item.id = `${turnId}-${source.id}`;
@@ -85,6 +98,12 @@ function showSources(container, sources, turnId) {
       heading.append(localLink);
     }
     item.append(heading);
+    if (source.updated_at) {
+      const text = `资料版本：${formatDate(source.updated_at)} · 同步：${formatDate(source.synced_at)}`;
+      const version = node("p", "source-freshness", text);
+      version.title = `上游提交 ${source.source_revision || "未知"}。这是所同步来源版本的时间，不等同于官方发布日期。`;
+      item.append(version);
+    }
     if (source.source_type === "liked_qa") item.append(node("span", "source-badge", "点赞问答 · 辅助参考"));
     item.append(node("p", "", [source.category, source.heading].filter(Boolean).join(" / ")));
     if (source.api_path) item.append(node("p", "", `${source.method} ${source.api_path}`));
@@ -190,6 +209,8 @@ async function submitQuestion(question) {
   turn.append(node("div", "question-bubble", question), node("div", "answer-label", "领星文档助手"), answer, sources, notices, meta, feedback);
   $("conversation").append(turn);
   $("question").value = "";
+  const generation = {requestId: crypto.randomUUID(), conversationId: activeConversation, controller: new AbortController(), stopped: false, stopping: false, completed: false};
+  currentGeneration = generation;
   setBusy(true);
   let rawAnswer = "";
   let done = false;
@@ -207,6 +228,7 @@ async function submitQuestion(question) {
       answer.textContent = rawAnswer;
       if (follow) window.scrollTo({ top: document.body.scrollHeight });
     } else if (event.type === "done") {
+      generation.completed = true;
       done = true;
       rawAnswer = event.answer;
       answer.className = "answer-body markdown";
@@ -232,6 +254,9 @@ async function submitQuestion(question) {
       if (event.mode === "answer") {
         addFeedbackActions(feedback, event.feedback_id);
       }
+    } else if (event.type === "cancelled") {
+      generation.stopped = true;
+      generation.controller.abort();
     } else if (event.type === "error") { throw new Error(event.message); }
   }
   copy.addEventListener("click", async () => {
@@ -240,8 +265,8 @@ async function submitQuestion(question) {
   });
   try {
     const response = await secureFetch("/api/ask/stream", {
-      method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ question, conversation_id: activeConversation, request_id: crypto.randomUUID(), category: $("category").value, mode: $("retrieve-only").checked ? "retrieve" : "answer" })
+      method: "POST", headers: { "Content-Type": "application/json" }, signal: generation.controller.signal,
+      body: JSON.stringify({ question, conversation_id: generation.conversationId, request_id: generation.requestId, category: $("category").value, mode: $("retrieve-only").checked ? "retrieve" : "answer" })
     });
     if (!response.ok) { const error = await response.json(); throw new Error(error.error || "请求失败"); }
     if (!response.body) throw new Error("浏览器不支持流式响应，请更换新版浏览器。");
@@ -260,13 +285,27 @@ async function submitQuestion(question) {
         if (result.done) break;
       }
       if (buffer.trim()) onEvent(JSON.parse(buffer));
-      if (!done) throw new Error("连接提前结束，回答可能不完整，请重试。");
+      if (!done && !generation.stopped) throw new Error("连接提前结束，回答可能不完整，请重试。");
     } finally { await reader.cancel().catch(() => {}); reader.releaseLock(); }
   } catch (error) {
+    if (generation.stopped) {
+      answer.className = "answer-body markdown";
+      answer.textContent = rawAnswer || "已停止生成。";
+      time.textContent = "已停止 · 保存前取消的回答不计入历史和记忆";
+      copy.disabled = !rawAnswer;
+    } else {
     showError(error.message || "服务连接失败，请重试。");
     if (!rawAnswer) { answer.className = "answer-body"; answer.textContent = "本次未能完成回答，可查看已检索到的来源后重试。"; }
     else time.textContent = "回答未完成";
+    }
   } finally {
+    if (generation.stopped && !done) {
+      answer.className = "answer-body markdown";
+      answer.textContent = rawAnswer || "已停止生成。";
+      time.textContent = "已停止 · 本次未完成的回答不保存";
+      copy.disabled = !rawAnswer;
+    }
+    if (currentGeneration === generation) currentGeneration = null;
     setBusy(false); $("activity").textContent = "Enter 发送 · Shift + Enter 换行"; $("question").focus();
   }
 }
@@ -292,7 +331,10 @@ $("update-index").addEventListener("click", async () => {
 });
 
 async function loadConversationList() {
-  const data = await jsonRequest("/api/conversations");
+  const sequence = ++conversationListSequence;
+  const query = $("conversation-search").value.trim();
+  const data = await jsonRequest(`/api/conversations?q=${encodeURIComponent(query)}`);
+  if (sequence !== conversationListSequence) return data.conversations;
   const list = $("conversation-list");
   list.replaceChildren();
   for (const conversation of data.conversations) {
@@ -306,6 +348,7 @@ async function loadConversationList() {
     button.addEventListener("click", () => openConversation(conversation.id));
     list.append(button);
   }
+  if (!data.conversations.length) list.append(node("p", "sidebar-note", query ? "没有找到匹配的对话" : "还没有对话"));
   return data.conversations;
 }
 
@@ -343,6 +386,7 @@ async function openConversation(id) {
   try {
     const data = await jsonRequest(`/api/conversations/${encodeURIComponent(id)}`);
     activeConversation = id; localStorage.setItem(conversationKey, id);
+    $("conversation-title").textContent = data.title;
     olderBefore = data.before;
     $("conversation").replaceChildren(...data.turns.map(savedTurn));
     $("welcome").classList.toggle("hidden", data.turns.length > 0);
@@ -390,5 +434,124 @@ async function initializeConversations() {
     if (id) await openConversation(id); else await newConversation();
   } catch (problem) { showError(problem.message); setBusy(false); }
 }
+function formatDate(value) {
+  if (!value) return "尚无记录";
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? "时间未知" : date.toLocaleString("zh-CN", {year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hour12: false});
+}
+
+$("stop-generation").addEventListener("click", async () => {
+  const generation = currentGeneration;
+  if (!generation || generation.completed || generation.stopping) return;
+  generation.stopping = true;
+  $("stop-generation").disabled = true;
+  $("activity").textContent = "正在停止生成…";
+  try {
+    const result = await jsonRequest(`/api/conversations/${generation.conversationId}/cancel`, {
+      method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({request_id: generation.requestId})
+    });
+    if (!generation.completed && !result.already_completed) {
+      generation.stopped = true;
+      generation.controller.abort();
+    }
+  } catch (problem) {
+    showError(`停止请求失败：${problem.message}`);
+    generation.stopping = false;
+    if (currentGeneration === generation) $("stop-generation").disabled = false;
+  }
+});
+
+let searchTimer = null;
+$("conversation-search").addEventListener("input", () => {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => loadConversationList().catch(problem => showError(problem.message)), 220);
+});
+
+$("rename-conversation").addEventListener("click", async () => {
+  if (busy || !activeConversation) return;
+  const title = window.prompt("对话名称（1–100 个字符）", $("conversation-title").textContent);
+  if (title === null) return;
+  setBusy(true);
+  try {
+    const result = await jsonRequest(`/api/conversations/${activeConversation}`, {
+      method: "PATCH", headers: {"Content-Type": "application/json"}, body: JSON.stringify({title})
+    });
+    $("conversation-title").textContent = result.title;
+    await loadConversationList();
+  } catch (problem) { showError(problem.message); }
+  finally { setBusy(false); }
+});
+
+$("delete-conversation").addEventListener("click", async () => {
+  if (busy || !activeConversation) return;
+  if (!window.confirm("删除当前对话、全部历史问答和摘要？此操作不可恢复。已点赞的共享知识仍会保留。")) return;
+  setBusy(true);
+  try {
+    const result = await jsonRequest(`/api/conversations/${activeConversation}`, {method: "DELETE"});
+    activeConversation = null;
+    localStorage.removeItem(conversationKey);
+    $("conversation-search").value = "";
+    const conversations = await loadConversationList();
+    const next = result.replacement?.id || conversations[0]?.id;
+    setBusy(false);
+    if (next) await openConversation(next); else await newConversation();
+  } catch (problem) { showError(problem.message); setBusy(false); }
+});
+
+$("export-conversation").addEventListener("click", async () => {
+  if (busy || !activeConversation) return;
+  const conversationId = activeConversation;
+  const filename = $("conversation-title").textContent.replace(/[<>:"/\\|?*\u0000-\u001f]/g, "_").slice(0, 100) || "对话";
+  setBusy(true);
+  try {
+    const response = await secureFetch(`/api/conversations/${conversationId}/export`);
+    if (!response.ok) { const error = await response.json(); throw new Error(error.error || "导出失败"); }
+    const url = URL.createObjectURL(await response.blob());
+    const link = node("a");
+    link.href = url; link.download = `${filename}.md`;
+    document.body.append(link); link.click(); link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  } catch (problem) { showError(problem.message); }
+  finally { setBusy(false); }
+});
+
+async function requestDocumentSync(checkOnly) {
+  $("check-docs").disabled = $("sync-docs").disabled = true;
+  try {
+    await jsonRequest("/api/documents/sync", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({check_only: checkOnly})});
+    await loadStatus();
+  } catch (problem) { showError(problem.message); await loadStatus(); }
+}
+$("check-docs").addEventListener("click", () => requestDocumentSync(true));
+$("sync-docs").addEventListener("click", () => requestDocumentSync(false));
+$("sync-history").addEventListener("toggle", () => {
+  if ($("sync-history").open) loadDocumentHistory().catch(problem => showError(problem.message));
+});
+
+async function loadDocumentHistory() {
+  const data = await jsonRequest("/api/documents/versions");
+  const container = $("sync-versions");
+  container.replaceChildren();
+  if (!data.versions.length) { container.append(node("p", "sidebar-note", "同步后会在这里记录文档版本与增删改明细。")); return; }
+  for (const version of data.versions) {
+    const item = node("details", "sync-version");
+    item.append(node("summary", "", `${version.revision.slice(0, 8)} · ${formatDate(version.synced_at)}`));
+    item.append(node("p", "", `来源版本时间：${formatDate(version.source_time)}（非官方发布日期）`));
+    for (const [key, label] of [["added", "新增"], ["modified", "修改"], ["deleted", "删除"]]) {
+      const paths = version[key] || [];
+      const total = version.counts?.[key] ?? paths.length;
+      if (!total) continue;
+      item.append(node("p", "", `${label} ${total} 篇：${paths.slice(0, 12).join("、")}${total > 12 ? "…" : ""}`));
+    }
+    if (!(version.added.length + version.modified.length + version.deleted.length)) item.append(node("p", "", "建立资料版本基线，文档内容未变化。"));
+    if (version.compare_url?.startsWith("https://github.com/")) {
+      const link = node("a", "", "查看上游提交 ↗");
+      link.href = version.compare_url; link.target = "_blank"; link.rel = "noopener noreferrer";
+      item.append(link);
+    }
+    container.append(item);
+  }
+}
+
 loadStatus();
 initializeConversations();

@@ -21,10 +21,17 @@ def main():
     search = commands.add_parser("search", help="检索预览，不调用 DeepSeek")
     search.add_argument("question")
     commands.add_parser("check", help="显示配置与索引状态，不显示 API key")
+    commands.add_parser("check-docs", help="检查文档源增删改，不下载或发布文档")
+    commands.add_parser("sync-docs", help="同步文档、记录版本并增量更新索引")
     args = parser.parse_args()
     settings = Settings.load()
     settings.validate()
-    if args.command == "download-model":
+    if args.command in ("check-docs", "sync-docs"):
+        from rag.document_sync import DocumentSync
+        manager = DocumentSync(settings)
+        manager.run(check_only=args.command == "check-docs")
+        print(json.dumps(manager.status(), ensure_ascii=False, indent=2))
+    elif args.command == "download-model":
         print(LocalEmbedding(settings).download())
     elif args.command == "download-reranker":
         print(OptionalReranker(settings).download())
