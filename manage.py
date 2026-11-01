@@ -49,8 +49,7 @@ def main():
                           "model_downloaded": (settings.model_dir / "model.safetensors").exists(),
                           "rerank_enabled": settings.rerank_enabled, "rerank_model": settings.rerank_model,
                           "rerank_backend": settings.rerank_backend,
-                          "react_retrieval_enabled": settings.react_retrieval_enabled,
-                          "react_max_tool_calls": settings.react_max_tool_calls,
+                          "retrieval_retry_enabled": settings.retrieval_retry_enabled,
                           "rerank_model_downloaded": OptionalReranker(settings).downloaded(),
                           "indexed_documents": active["document_count"] if active else 0,
                           "indexed_chunks": active["chunk_count"] if active else 0}, ensure_ascii=False, indent=2))

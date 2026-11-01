@@ -103,14 +103,15 @@ def conversation_events(args, cancel_token=None):
             if event["type"] == "done":
                 event = {**event, "conversation_id": conversation_id,
                          "memory_version": context["memory_version"]}
-                if event.get("mode") == "answer":
-                    if is_guest:
+                if event.get("mode") in ("answer", "clarification"):
+                    if is_guest or event["mode"] == "clarification":
                         event.pop("feedback_id", None)
                     else:
                         event["feedback_id"] = event.get("feedback_id") or secrets.token_urlsafe(24)
                     event["request_id"] = request_id
                     repo.save_turn(user_id, conversation_id, token, request_id, question, category, event)
-                    memory.schedule(user_id, conversation_id)
+                    if event["mode"] == "answer":
+                        memory.schedule(user_id, conversation_id)
                 if context["memory_error"]:
                     event["notices"] = [*event.get("notices", []), context["memory_error"]]
             yield event
@@ -220,8 +221,7 @@ def status():
         "rerank_backend": settings().rerank_backend,
         "rerank_model_downloaded": OptionalReranker(settings()).downloaded(),
         "mysql_knowledge_enabled": settings().mysql_enabled,
-        "react_retrieval_enabled": settings().react_retrieval_enabled,
-        "react_max_tool_calls": settings().react_max_tool_calls,
+        "retrieval_retry_enabled": settings().retrieval_retry_enabled,
         "document_count": active["document_count"] if active else 0,
         "chunk_count": active["chunk_count"] if active else 0,
         "categories": sorted({c.split("/")[0] for c in active["categories"]}) if active else [],

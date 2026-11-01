@@ -217,6 +217,22 @@ def test_summary_failure_and_claim_exclusion(setup):
     assert repo.context(uid, cid)["memory_version"] == 1
 
 
+def test_subject_survives_compaction_and_more_generic_followups(setup):
+    app, repo, service, _settings = setup
+    client = register(app, "alice")
+    cid = new_chat(client)
+    uid = repo.get_user(username="alice")["id"]
+    for question in ("刊登怎么做", "需要哪些参数", "哪些是必填的", "有哪些可选参数", "参数是什么类型"):
+        assert ask(client, cid, question).status_code == 200
+    memory = MemoryManager(repo, service.llm)
+    memory.compact(uid, cid)
+    context = repo.context(uid, cid)
+    assert context["history"] == [] and context["retrieval_hint"] == "刊登怎么做"
+    assert ask(client, cid, "有哪些必填项").status_code == 200
+    context = repo.context(uid, cid)
+    assert context["history"] and context["retrieval_hint"] == "刊登怎么做"
+
+
 def test_memory_prompt_is_scoped_context():
     messages = build_messages("当前问题", ContextBundle("本轮原文", [], 0, []), [], "只属于当前对话的摘要")
     assert "<conversation_memory>\n只属于当前对话的摘要" in messages[-1]["content"]

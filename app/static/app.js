@@ -248,10 +248,11 @@ async function submitQuestion(question) {
       time.textContent = `${event.stats.total_seconds}s · ${event.sources.length} 处来源`;
       if (event.stats.rerank_applied) time.textContent += ` · 重排序 ${event.stats.rerank_seconds}s`;
       if (event.stats.query_decomposition_applied) time.textContent += ` · 拆分 ${event.stats.query_decomposition_count} 个子问题`;
-      if (event.stats.react_enabled) {
+      if (event.stats.retrieval_intent) {
         const labels = {endpoint: "接口", parameters: "参数", response: "返回字段", workflow: "流程", version: "版本", general: "文档"};
-        time.textContent += ` · ${labels[event.stats.react_intent] || "文档"}检索 ${event.stats.react_tool_calls} 次`;
+        time.textContent += ` · ${labels[event.stats.retrieval_intent] || "文档"}检索 ${event.stats.retrieval_rounds} 轮`;
       }
+      if (event.stats.needs_clarification) time.textContent += " · 待确认接口";
       if (event.stats.rerank_low_confidence) time.textContent += " · 相关性不足";
       copy.disabled = false;
       $("memory-label").textContent = event.memory_version ? `记忆摘要 · 第 ${event.memory_version} 版` : "近期问答自动记忆";

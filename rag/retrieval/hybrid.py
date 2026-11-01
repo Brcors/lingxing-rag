@@ -8,6 +8,7 @@ from rag.indexing.store import CorpusStore, VectorStore
 from rag.retrieval.lexical import LexicalIndex
 from rag.retrieval.reranker import OptionalReranker, RerankError
 from rag.types import SearchHit
+from rag.retrieval.query import context_anchor, is_detail_followup, search_query
 
 logger = logging.getLogger(__name__)
 
@@ -24,19 +25,6 @@ def reciprocal_rank_fusion(rankings, chunks, constant=60):
             else:
                 hit.bm25_score = raw_score
     return sorted(merged.values(), key=lambda hit: hit.score, reverse=True)
-
-
-def search_query(question, history=None):
-    query = question.strip()
-    if history and len(query) < 80 and any(word in query for word in ("这个", "该接口", "它的", "上面", "刚才", "那它")):
-        previous = next((m["content"] for m in reversed(history) if m.get("role") == "user"), "")
-        if previous:
-            query = previous[:160] + "\n追问：" + query
-    aliases = {"FNSKU": "FNSKU 商品标签", "access token": "access_token", "STA": "STA 货件"}
-    for word, expansion in aliases.items():
-        if word.lower() in query.lower() and expansion.lower() not in query.lower():
-            query += " " + expansion
-    return query
 
 
 class HybridRetriever:

@@ -25,25 +25,23 @@ class DeepSeekClient:
             "stream": stream,
         }
 
-    def _open(self, messages, stream, max_tokens=None, temperature=None, cancel_token=None,
-              timeout=None, max_attempts=3):
+    def _open(self, messages, stream, max_tokens=None, temperature=None, cancel_token=None):
         if not self.settings.api_key:
             raise LLMError("请在 config.py 的 DEEPSEEK_API_KEY 中填写 API key，保存并重启服务。")
         url = self.settings.base_url.rstrip("/") + "/chat/completions"
         headers = {"Content-Type": "application/json", "Authorization": "Bearer " + self.settings.api_key}
-        read_timeout = self.settings.timeout if timeout is None else timeout
-        for attempt in range(max_attempts):
+        for attempt in range(3):
             if cancel_token:
                 cancel_token.check()
             try:
                 response = call_cancellable(lambda: requests.post(url, headers=headers,
                                          json=self.payload(messages, stream, max_tokens, temperature),
-                                         timeout=(min(10, read_timeout), read_timeout), stream=stream or bool(cancel_token)),
+                                         timeout=(10, self.settings.timeout), stream=stream or bool(cancel_token)),
                                             cancel_token, response=True)
             except requests.ConnectTimeout:
                 if cancel_token:
                     cancel_token.check()
-                if attempt < max_attempts - 1:
+                if attempt < 2:
                     time.sleep(0.5 * (attempt + 1))
                     continue
                 raise LLMError("无法连接 DeepSeek，请检查网络后重试。") from None
@@ -58,7 +56,7 @@ class DeepSeekClient:
             if cancel_token and cancel_token.event.is_set():
                 response.close()
                 cancel_token.check()
-            if response.status_code in (429, 500, 502, 503, 504) and attempt < max_attempts - 1:
+            if response.status_code in (429, 500, 502, 503, 504) and attempt < 2:
                 response.close()
                 time.sleep(0.5 * (attempt + 1))
                 continue
@@ -72,10 +70,9 @@ class DeepSeekClient:
             return response
         raise LLMError("DeepSeek 服务暂时不可用。")
 
-    def complete(self, messages, max_tokens=None, temperature=None, cancel_token=None,
-                 timeout=None, max_attempts=3):
+    def complete(self, messages, max_tokens=None, temperature=None, cancel_token=None):
         # 可取消请求先只打开响应头，再读取正文，便于关闭连接。
-        response = self._open(messages, False, max_tokens, temperature, cancel_token, timeout, max_attempts)
+        response = self._open(messages, False, max_tokens, temperature, cancel_token)
         try:
             if cancel_token:
                 cancel_token.add_response(response)

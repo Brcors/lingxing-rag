@@ -45,6 +45,25 @@ def test_export_includes_all_pages_and_document_dates(setup):
     assert "2026-11-01T00:00:00Z" in text and "https://example.com/api" in text
 
 
+def test_clarification_is_saved_once_without_feedback(setup):
+    app, repo, service, _settings = setup
+    client = register(app, "alice")
+    cid = new_chat(client)
+    calls = []
+    def events(*args, **kwargs):
+        calls.append(args)
+        yield {"type": "done", "answer": "请先选定刊登步骤或接口。", "sources": [], "notices": [],
+               "stats": {"needs_clarification": True}, "mode": "clarification"}
+    service.events = events
+    request_id = secrets.token_hex(16)
+    response = ask(client, cid, "需要哪些参数", request_id=request_id)
+    assert response.status_code == 200 and response.json["mode"] == "clarification"
+    assert "feedback_id" not in response.json
+    assert ask(client, cid, "需要哪些参数", request_id=request_id).status_code == 200
+    turns = client.get(f"/api/conversations/{cid}").json["turns"]
+    assert len(calls) == len(turns) == 1 and turns[0]["response"]["mode"] == "clarification"
+
+
 def test_deleting_last_guest_chat_preserves_guest_identity(setup):
     app, repo, service, settings = setup
     visitor, gid, cid = enter_guest(app)

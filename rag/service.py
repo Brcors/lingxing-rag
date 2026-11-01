@@ -13,7 +13,8 @@ from rag.indexing.store import CorpusStore
 from rag.knowledge.feedback_kb import FeedbackKnowledgeBase
 from rag.retrieval.hybrid import HybridRetriever
 from rag.retrieval.reranker import RerankError
-from rag.retrieval.react import BoundedRetriever
+from rag.retrieval.flow import RetrievalFlow
+from rag.retrieval.routing import classify, parameter_clarification
 from rag.types import SearchHit
 
 logger = logging.getLogger(__name__)
@@ -62,7 +63,7 @@ class RAGService:
             for index, candidate in enumerate(queries):
                 query, found, found_documents, found_chunks = self.retriever.search(
                     candidate, category, history if index == 0 else None,
-                    diagnostics={}, rerank=False, finalize=False,
+                    diagnostics={}, rerank=False, finalize=False, intent=intent,
                 )
                 normalized_queries.append(query)
                 query_results.append((query, found))
@@ -118,7 +119,7 @@ class RAGService:
             )
             if notice:
                 diagnostics["rerank_notice"] = notice
-            hits = self.retriever.select_final_hits(question, candidates, applied, diagnostics)
+            hits = self.retriever.select_final_hits(question, candidates, applied, diagnostics, intent=intent)
             query = normalized_queries[0] if normalized_queries else question
 
         knowledge_hits, knowledge_notice = [], None
@@ -175,28 +176,29 @@ class RAGService:
         if cancel_token:
             cancel_token.check()
         # 摘要刚整理完成时，保留上一问题作为检索指代线索；不重复发送整组旧问答。
-        retrieval_history = history or ([{"role": "user", "content": retrieval_hint}] if retrieval_hint else [])
+        retrieval_history = list(history or [])
+        if retrieval_hint and not any(item.get("role") == "user" and item.get("content") == retrieval_hint
+                                      for item in retrieval_history):
+            retrieval_history.insert(0, {"role": "user", "content": retrieval_hint})
         extra_queries, decomposition_notice = [], None
-        if (not self.settings.react_retrieval_enabled and not retrieve_only and self.settings.api_key and self.settings.query_decomposition_enabled
+        if (classify(question, retrieval_history) != "version" and not retrieve_only and self.settings.api_key and self.settings.query_decomposition_enabled
                 and should_decompose(question)):
             yield {"type": "status", "message": "正在拆解多步骤问题…"}
             extra = {"cancel_token": cancel_token} if cancel_token else {}
             extra_queries, decomposition_notice = self.decomposer.decompose(question, retrieval_history, **extra)
-        if self.settings.react_retrieval_enabled:
-            bundle, stats = yield from BoundedRetriever(self).run(
-                question, category, retrieval_history, retrieve_only, cancel_token)
-        else:
-            message = "正在检索并进行本地重排序…" if self.settings.rerank_enabled else "正在检索接口文档…"
-            yield {"type": "status", "message": message}
-            bundle, stats = self.retrieve(question, category, retrieval_history, extra_queries=extra_queries)
+        bundle, stats = yield from RetrievalFlow(self).run(
+            question, category, retrieval_history, extra_queries=extra_queries, cancel_token=cancel_token)
         if cancel_token:
             cancel_token.check()
         if decomposition_notice:
             bundle.notices.append(decomposition_notice)
         yield {"type": "sources", "sources": bundle.sources, "notices": bundle.notices, "stats": stats}
-        if not bundle.sources:
+        clarification = parameter_clarification(question, retrieval_history, bundle) if stats.get("needs_clarification") else None
+        if clarification:
+            answer, generated = clarification, False
+        elif not bundle.sources:
             answer = ("没有当前文档源的可用版本记录，请先在侧栏检查或同步文档。"
-                      if stats.get("react_intent") == "version" else
+                      if stats.get("retrieval_intent") == "version" else
                       "没有找到可用的文档证据。请补充业务模块、接口名称、参数名或错误码后重试。")
             generated = False
         elif retrieve_only or not self.settings.api_key:
@@ -209,7 +211,7 @@ class RAGService:
             parts = []
             extra = {"cancel_token": cancel_token} if cancel_token else {}
             retrieval_status = ("当前检索仍未确认全部所需信息。明确说明缺失的依据，不得补造未命中的接口或字段。"
-                                if stats.get("react_evidence_incomplete") else "")
+                                if stats.get("retrieval_evidence_incomplete") else "")
             stream = self.llm.stream(build_messages(question, bundle, history, memory_summary, retrieval_status), **extra)
             try:
                 for token in stream:
@@ -226,11 +228,11 @@ class RAGService:
             cancel_token.check()
         answer, notices = self.check_citations(answer, bundle) if self.settings.api_key and not retrieve_only else (answer, [])
         feedback_id = (self.feedback_kb.register_answer(question, answer, bundle.sources, category)
-                       if generated and self.settings.mysql_enabled and allow_feedback and stats.get("react_intent") != "version" else None)
+                       if generated and self.settings.mysql_enabled and allow_feedback and stats.get("retrieval_intent") != "version" else None)
         stats["total_seconds"] = round(time.monotonic() - start, 2)
         done = {"type": "done", "answer": answer, "sources": bundle.sources,
                "notices": bundle.notices + notices, "stats": stats,
-               "mode": "answer" if generated else "retrieval"}
+               "mode": "clarification" if clarification and not retrieve_only else "answer" if generated else "retrieval"}
         if feedback_id:
             done["feedback_id"] = feedback_id
         yield done

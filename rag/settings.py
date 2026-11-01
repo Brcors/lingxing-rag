@@ -40,9 +40,7 @@ class Settings:
     query_decomposition_enabled: bool = config.QUERY_DECOMPOSITION_ENABLED
     query_decomposition_max_subquestions: int = config.QUERY_DECOMPOSITION_MAX_SUBQUESTIONS
     query_decomposition_max_tokens: int = config.QUERY_DECOMPOSITION_MAX_TOKENS
-    react_retrieval_enabled: bool = config.REACT_RETRIEVAL_ENABLED
-    react_max_tool_calls: int = config.REACT_MAX_TOOL_CALLS
-    react_planner_max_tokens: int = config.REACT_PLANNER_MAX_TOKENS
+    retrieval_retry_enabled: bool = config.RETRIEVAL_RETRY_ENABLED
     mysql_enabled: bool = config.MYSQL_ENABLED
     mysql_host: str = config.MYSQL_HOST
     mysql_port: int = config.MYSQL_PORT
@@ -95,10 +93,8 @@ class Settings:
             raise ValueError("问题拆解最多允许 1 到 3 个子问题。")
         if not 64 <= self.query_decomposition_max_tokens <= 1024:
             raise ValueError("问题拆解生成长度应在 64 到 1024 token 之间。")
-        if self.react_max_tool_calls not in (1, 2):
-            raise ValueError("ReAct 检索工具调用上限只能为 1 或 2。")
-        if not 64 <= self.react_planner_max_tokens <= 512:
-            raise ValueError("ReAct 补查规划生成长度应在 64 到 512 token 之间。")
+        if not isinstance(self.retrieval_retry_enabled, bool):
+            raise ValueError("RETRIEVAL_RETRY_ENABLED 必须为 True 或 False。")
         if self.rerank_backend not in ("onnx-int8", "torch"):
             raise ValueError("重排序后端应为 onnx-int8 或 torch。")
         if self.mysql_enabled:

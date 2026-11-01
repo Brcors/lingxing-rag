@@ -7,6 +7,7 @@ from contextlib import contextmanager
 import pymysql
 
 from rag.knowledge.mysql_repository import MySQLKnowledgeRepository
+from rag.retrieval.query import context_anchor, is_detail_followup
 
 logger = logging.getLogger(__name__)
 
@@ -224,11 +225,12 @@ class AccountRepository:
                 history.extend([{"role": "user", "content": turn["question"][:4000]},
                                 {"role": "assistant", "content": turn["answer"][:4000]}])
             hint = ""
-            if not history and row["covered_turn_id"]:
-                cur.execute(f"SELECT question FROM {self.turn_table} WHERE id=%s AND conversation_id=%s",
-                            (row["covered_turn_id"], conversation_id))
-                latest = cur.fetchone()
-                hint = latest["question"] if latest else ""
+            if not any(item["role"] == "user" and not is_detail_followup(item["content"]) for item in history):
+                # Raw questions remain available after compaction; retain the latest explicit subject.
+                cur.execute(f"SELECT question FROM {self.turn_table} WHERE conversation_id=%s ORDER BY id DESC LIMIT 50",
+                            (conversation_id,))
+                hint = context_anchor([{"role": "user", "content": item["question"]}
+                                       for item in reversed(cur.fetchall())])
             return {"summary": row["summary"] or "", "history": history,
                     "retrieval_hint": hint, "memory_version": row["memory_version"], "memory_error": row["memory_error"]}
 
