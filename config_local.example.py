@@ -13,3 +13,7 @@ MYSQL_DATABASE = "lingxing_rag"
 # 启动后每小时检查现有 GitHub 文档源；改为 False 可关闭后台同步。
 DOC_SYNC_ENABLED = True
 DOC_SYNC_INTERVAL_SECONDS = 3600
+
+# 默认本地判断问题类型，必要时补查一次。
+REACT_RETRIEVAL_ENABLED = True
+REACT_MAX_TOOL_CALLS = 2

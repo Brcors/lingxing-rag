@@ -39,8 +39,8 @@ def main():
         IndexBuilder(settings, LocalEmbedding(settings)).build(args.force, progress=lambda text: print(text, flush=True))
     elif args.command == "search":
         from rag.service import RAGService
-        bundle, stats = RAGService(settings).retrieve(args.question)
-        print(json.dumps({"sources": bundle.sources, "stats": stats}, ensure_ascii=False, indent=2))
+        result = RAGService(settings).ask(args.question, retrieve_only=True)
+        print(json.dumps({"sources": result["sources"], "stats": result["stats"]}, ensure_ascii=False, indent=2))
     else:
         from rag.indexing.store import CorpusStore
         active = CorpusStore(settings).active()
@@ -49,6 +49,8 @@ def main():
                           "model_downloaded": (settings.model_dir / "model.safetensors").exists(),
                           "rerank_enabled": settings.rerank_enabled, "rerank_model": settings.rerank_model,
                           "rerank_backend": settings.rerank_backend,
+                          "react_retrieval_enabled": settings.react_retrieval_enabled,
+                          "react_max_tool_calls": settings.react_max_tool_calls,
                           "rerank_model_downloaded": OptionalReranker(settings).downloaded(),
                           "indexed_documents": active["document_count"] if active else 0,
                           "indexed_chunks": active["chunk_count"] if active else 0}, ensure_ascii=False, indent=2))

@@ -85,6 +85,23 @@ def test_complete_uses_json_protocol_even_when_transport_is_cancellable(settings
     assert observed[0]["stream"] is True
 
 
+def test_planner_request_can_disable_http_retries(settings, monkeypatch):
+    from rag.generation.client import LLMError
+    calls = []
+    class Response:
+        status_code = 503
+        ok = False
+        def close(self):
+            pass
+    def post(*args, **kwargs):
+        calls.append(kwargs)
+        return Response()
+    monkeypatch.setattr("rag.generation.client.requests.post", post)
+    with pytest.raises(LLMError):
+        DeepSeekClient(replace(settings, api_key="fake")).complete([], timeout=15, max_attempts=1)
+    assert len(calls) == 1 and calls[0]["timeout"] == (10, 15)
+
+
 def test_early_cancel_and_owner_isolation():
     registry = GenerationRegistry()
     a = ("account", "1", "conversation", "request")

@@ -203,7 +203,8 @@ def test_upgrade_existing_schema_preserves_registered_data(tmp_path):
 def test_guest_generation_does_not_fill_feedback_buffer(setup, monkeypatch):
     _app, _repo, _service, settings = setup
     rag = RAGService(settings)
-    monkeypatch.setattr(rag, "retrieve", lambda *a, **k: (ContextBundle("测试证据", [{"id": "S1"}], 10), {}))
+    monkeypatch.setattr(rag, "retrieve", lambda *a, **k: (ContextBundle("测试证据",
+        [{"id": "S1", "heading": "请求参数", "excerpt": "测试证据"}], 10), {}))
     monkeypatch.setattr(rag.llm, "stream", lambda *a, **k: iter(["测试回答[S1]"]))
     monkeypatch.setattr(rag.feedback_kb, "register_answer", lambda *a, **k: pytest.fail("游客回答不应写入点赞暂存区"))
     done = list(rag.events("查询参数", allow_feedback=False))[-1]

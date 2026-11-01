@@ -66,7 +66,7 @@ class HybridRetriever:
         return active
 
     def search(self, question, category=None, history=None, *, diagnostics=None,
-               rerank=True, finalize=True):
+               rerank=True, finalize=True, intent=None):
         query = search_query(question, history)
         with self._lock:
             active = self.reload()
@@ -92,6 +92,9 @@ class HybridRetriever:
                     hit.score += 0.012
                 if chunk.api_path and chunk.api_path.lower() in question.lower():
                     hit.score += 0.025
+                preferred = {"parameters": {"parameters"}, "response": {"response"}, "endpoint": {"overview"}}
+                if chunk.kind in preferred.get(intent, set()):
+                    hit.score += 0.008
                 document = self.documents[chunk.document_id]
                 if document.is_legacy and "旧" not in question:
                     hit.score *= 0.8
@@ -117,12 +120,12 @@ class HybridRetriever:
                 if notice:
                     diagnostics["rerank_notice"] = notice
             if finalize:
-                hits = self.select_final_hits(question, hits, applied, diagnostics)
+                hits = self.select_final_hits(question, hits, applied, diagnostics, intent=intent)
             else:
                 hits = hits[:self.settings.rerank_candidates]
             return query, hits, dict(self.documents), dict(self.chunks)
 
-    def select_final_hits(self, question, hits, rerank_applied, diagnostics=None):
+    def select_final_hits(self, question, hits, rerank_applied, diagnostics=None, intent=None):
         """Abstain if even the strongest reranked candidate is below the relevance floor."""
         if rerank_applied and hits:
             best_score = max(hit.rerank_score for hit in hits if hit.rerank_score is not None)
@@ -135,6 +138,13 @@ class HybridRetriever:
                     diagnostics["rerank_filtered_candidates"] = len(hits)
                 return []
 
+        preferred = {"parameters": "parameters", "response": "response", "endpoint": "overview"}.get(intent)
+        if hits and preferred:
+            best_document = hits[0].chunk.document_id
+            relevant = [hit for hit in hits if hit.chunk.document_id == best_document and
+                        hit.chunk.kind == preferred and (not rerank_applied or
+                        (hit.rerank_score is not None and hit.rerank_score >= self.settings.rerank_min_score))]
+            hits = relevant + [hit for hit in hits if hit not in relevant]
         chosen, counts = [], Counter()
         workflow = any(word in question for word in ("流程", "步骤", "依次", "哪些接口", "前置", "依赖"))
         cap = 2 if workflow else 3

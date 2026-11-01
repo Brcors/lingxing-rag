@@ -220,6 +220,8 @@ def status():
         "rerank_backend": settings().rerank_backend,
         "rerank_model_downloaded": OptionalReranker(settings()).downloaded(),
         "mysql_knowledge_enabled": settings().mysql_enabled,
+        "react_retrieval_enabled": settings().react_retrieval_enabled,
+        "react_max_tool_calls": settings().react_max_tool_calls,
         "document_count": active["document_count"] if active else 0,
         "chunk_count": active["chunk_count"] if active else 0,
         "categories": sorted({c.split("/")[0] for c in active["categories"]}) if active else [],

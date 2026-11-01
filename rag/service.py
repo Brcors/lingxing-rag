@@ -13,6 +13,7 @@ from rag.indexing.store import CorpusStore
 from rag.knowledge.feedback_kb import FeedbackKnowledgeBase
 from rag.retrieval.hybrid import HybridRetriever
 from rag.retrieval.reranker import RerankError
+from rag.retrieval.react import BoundedRetriever
 from rag.types import SearchHit
 
 logger = logging.getLogger(__name__)
@@ -37,7 +38,7 @@ class RAGService:
                     self._retriever = HybridRetriever(self.settings, self.embedding)
         return self._retriever
 
-    def retrieve(self, question, category=None, history=None, extra_queries=None):
+    def retrieve(self, question, category=None, history=None, extra_queries=None, intent=None):
         start = time.monotonic()
         diagnostics = {}
         queries = []
@@ -52,7 +53,7 @@ class RAGService:
 
         if len(queries) <= 1:
             query, hits, documents, chunks = self.retriever.search(
-                question, category, history, diagnostics=diagnostics,
+                question, category, history, diagnostics=diagnostics, intent=intent,
             )
         else:
             query_results = []
@@ -176,21 +177,27 @@ class RAGService:
         # 摘要刚整理完成时，保留上一问题作为检索指代线索；不重复发送整组旧问答。
         retrieval_history = history or ([{"role": "user", "content": retrieval_hint}] if retrieval_hint else [])
         extra_queries, decomposition_notice = [], None
-        if (not retrieve_only and self.settings.api_key and self.settings.query_decomposition_enabled
+        if (not self.settings.react_retrieval_enabled and not retrieve_only and self.settings.api_key and self.settings.query_decomposition_enabled
                 and should_decompose(question)):
             yield {"type": "status", "message": "正在拆解多步骤问题…"}
             extra = {"cancel_token": cancel_token} if cancel_token else {}
             extra_queries, decomposition_notice = self.decomposer.decompose(question, retrieval_history, **extra)
-        message = "正在检索并进行本地重排序…" if self.settings.rerank_enabled else "正在检索接口文档…"
-        yield {"type": "status", "message": message}
-        bundle, stats = self.retrieve(question, category, retrieval_history, extra_queries=extra_queries)
+        if self.settings.react_retrieval_enabled:
+            bundle, stats = yield from BoundedRetriever(self).run(
+                question, category, retrieval_history, retrieve_only, cancel_token)
+        else:
+            message = "正在检索并进行本地重排序…" if self.settings.rerank_enabled else "正在检索接口文档…"
+            yield {"type": "status", "message": message}
+            bundle, stats = self.retrieve(question, category, retrieval_history, extra_queries=extra_queries)
         if cancel_token:
             cancel_token.check()
         if decomposition_notice:
             bundle.notices.append(decomposition_notice)
         yield {"type": "sources", "sources": bundle.sources, "notices": bundle.notices, "stats": stats}
         if not bundle.sources:
-            answer = "没有找到可用的文档证据。请补充业务模块、接口名称、参数名或错误码后重试。"
+            answer = ("没有当前文档源的可用版本记录，请先在侧栏检查或同步文档。"
+                      if stats.get("react_intent") == "version" else
+                      "没有找到可用的文档证据。请补充业务模块、接口名称、参数名或错误码后重试。")
             generated = False
         elif retrieve_only or not self.settings.api_key:
             answer = (f"已找到 **{len(bundle.sources)} 处文档依据**，可展开下方来源查看。\n\n"
@@ -201,7 +208,9 @@ class RAGService:
             yield {"type": "status", "message": "正在生成回答…"}
             parts = []
             extra = {"cancel_token": cancel_token} if cancel_token else {}
-            stream = self.llm.stream(build_messages(question, bundle, history, memory_summary), **extra)
+            retrieval_status = ("当前检索仍未确认全部所需信息。明确说明缺失的依据，不得补造未命中的接口或字段。"
+                                if stats.get("react_evidence_incomplete") else "")
+            stream = self.llm.stream(build_messages(question, bundle, history, memory_summary, retrieval_status), **extra)
             try:
                 for token in stream:
                     if cancel_token:
@@ -217,7 +226,7 @@ class RAGService:
             cancel_token.check()
         answer, notices = self.check_citations(answer, bundle) if self.settings.api_key and not retrieve_only else (answer, [])
         feedback_id = (self.feedback_kb.register_answer(question, answer, bundle.sources, category)
-                       if generated and self.settings.mysql_enabled and allow_feedback else None)
+                       if generated and self.settings.mysql_enabled and allow_feedback and stats.get("react_intent") != "version" else None)
         stats["total_seconds"] = round(time.monotonic() - start, 2)
         done = {"type": "done", "answer": answer, "sources": bundle.sources,
                "notices": bundle.notices + notices, "stats": stats,

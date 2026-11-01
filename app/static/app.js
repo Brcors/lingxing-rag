@@ -105,6 +105,7 @@ function showSources(container, sources, turnId) {
       item.append(version);
     }
     if (source.source_type === "liked_qa") item.append(node("span", "source-badge", "点赞问答 · 辅助参考"));
+    if (source.source_type === "document_version") item.append(node("span", "source-badge", "本机版本记录"));
     item.append(node("p", "", [source.category, source.heading].filter(Boolean).join(" / ")));
     if (source.api_path) item.append(node("p", "", `${source.method} ${source.api_path}`));
     const excerpt = node("details", "source-excerpt");
@@ -114,7 +115,7 @@ function showSources(container, sources, turnId) {
       try {
         const url = new URL(source.source_url);
         if (["https:", "http:"].includes(url.protocol)) {
-          const original = node("a", "", "官方原文 ↗");
+          const original = node("a", "", source.source_type === "document_version" ? "文档来源仓库 ↗" : "官方原文 ↗");
           original.href = url.href; original.target = "_blank"; original.rel = "noopener noreferrer";
           item.append(original);
         }
@@ -247,6 +248,10 @@ async function submitQuestion(question) {
       time.textContent = `${event.stats.total_seconds}s · ${event.sources.length} 处来源`;
       if (event.stats.rerank_applied) time.textContent += ` · 重排序 ${event.stats.rerank_seconds}s`;
       if (event.stats.query_decomposition_applied) time.textContent += ` · 拆分 ${event.stats.query_decomposition_count} 个子问题`;
+      if (event.stats.react_enabled) {
+        const labels = {endpoint: "接口", parameters: "参数", response: "返回字段", workflow: "流程", version: "版本", general: "文档"};
+        time.textContent += ` · ${labels[event.stats.react_intent] || "文档"}检索 ${event.stats.react_tool_calls} 次`;
+      }
       if (event.stats.rerank_low_confidence) time.textContent += " · 相关性不足";
       copy.disabled = false;
       $("memory-label").textContent = event.memory_version ? `记忆摘要 · 第 ${event.memory_version} 版` : "近期问答自动记忆";
