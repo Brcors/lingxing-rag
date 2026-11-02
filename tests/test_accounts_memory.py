@@ -239,6 +239,21 @@ def test_memory_prompt_is_scoped_context():
     assert "本轮原文" in messages[-1]["content"]
 
 
+def test_context_retains_full_turn_for_atomic_request_budgeting(setup):
+    app, repo, _service, _settings = setup
+    client = register(app, "alice")
+    cid = new_chat(client)
+    uid = repo.get_user(username="alice")["id"]
+    token = repo.acquire(uid, cid)
+    answer = "完整回答" * 1500 + "\n```json\n{\"sku\": \"END\"}\n```"
+    event = {"answer": answer, "sources": [], "stats": {}, "notices": [], "mode": "answer"}
+    try:
+        repo.save_turn(uid, cid, token, secrets.token_hex(16), "提交商品资料", None, event)
+    finally:
+        repo.release(uid, cid, token)
+    assert repo.context(uid, cid)["history"][-1]["content"] == answer
+
+
 def test_database_failure_is_controlled(setup, monkeypatch):
     app, repo, service, _ = setup
     client = app.test_client()

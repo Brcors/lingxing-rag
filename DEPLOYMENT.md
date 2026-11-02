@@ -58,6 +58,14 @@ PaddleOCR 的识别模型在首次处理扫描 PDF 时下载并缓存在本机�
 
 修改配置后重启即可，无需重新计算文档向量。旧 `REACT_*` 参数已移除。省略主语的参数追问会补入本对话先前的业务对象；多接口流程未确定目标时先澄清，再回答具体参数。澄清记录与个人对话一起保存，不进入共享点赞库。版本查询读取本机保存的记录，停止生成仍可取消检索后的生成及已有的拆解请求。
 
+### 模型请求总预算
+
+在 `config_local.py` 中可设置 `LLM_CONTEXT_WINDOW=32768` 和 `LLM_CONTEXT_SAFETY_MARGIN=1024`。输入预算为总预算减去 `DEEPSEEK_MAX_TOKENS` 与安全余量；需至少留下 8192 的输入预算，安全余量至少 256。切换模型或 API 服务时，应确保总预算不超过其实际上下文窗口；默认值为本项目主动设置的保守上限。
+
+预算统计以 UTF-8 字节加消息开销保守估算，并非提供商精确分词或计费量。回答按最早整轮问答、摘要完整句子、低优先级整份证据的顺序精简；不修改数据库原始记录。系统规则、当前问题及必要证据仍超限时不发送请求，提示缩小范围。已保留的证据不从表格或 JSON 中间截断。
+
+所有生成、问题拆解和摘要请求发送前都有检查。服务端明确返回上下文超限、且尚未输出回答时，回答流程最多精简重试一次，不重复检索或拆解。摘要超限会保留原始问答及既有摘要，按原有失败机制等待重试。修改这两项配置后重启服务，无需重建索引。API 回答统计包含 `prompt_tokens_estimated`、`prompt_input_budget`、`prompt_output_reserved`、`prompt_safety_margin`、`prompt_context_window`、`prompt_history_turns_removed`、`prompt_memory_reduced`、`prompt_sources_removed` 及 `context_length_retry_applied`。
+
 ### 文档同步配置
 
 `run.py` 会启动后台检查线程，默认每小时检查已配置的 GitHub 文档源。手动执行同步命令或点击页面按钮会立即检查。`create_app()` 作为自定义 WSGI 入口时，需要自行调用 `app.extensions["document_sync"].start()` 才会启用定时检查。

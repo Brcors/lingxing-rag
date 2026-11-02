@@ -222,8 +222,8 @@ class AccountRepository:
                            ORDER BY id DESC LIMIT 4""", (conversation_id, row["covered_turn_id"]))
             history = []
             for turn in reversed(cur.fetchall()):
-                history.extend([{"role": "user", "content": turn["question"][:4000]},
-                                {"role": "assistant", "content": turn["answer"][:4000]}])
+                history.extend([{"role": "user", "content": turn["question"]},
+                                {"role": "assistant", "content": turn["answer"]}])
             hint = ""
             if not any(item["role"] == "user" and not is_detail_followup(item["content"]) for item in history):
                 # Raw questions remain available after compaction; retain the latest explicit subject.

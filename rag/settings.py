@@ -59,6 +59,8 @@ class Settings:
     temperature: float = config.DEEPSEEK_TEMPERATURE
     max_output_tokens: int = config.DEEPSEEK_MAX_TOKENS
     timeout: int = config.DEEPSEEK_TIMEOUT
+    llm_context_window: int = config.LLM_CONTEXT_WINDOW
+    llm_context_safety_margin: int = config.LLM_CONTEXT_SAFETY_MARGIN
 
     @classmethod
     def load(cls):
@@ -66,6 +68,12 @@ class Settings:
         return cls(api_key=environment_key or config.DEEPSEEK_API_KEY.strip())
 
     def validate(self):
+        if any(not isinstance(value, int) or isinstance(value, bool) for value in
+               (self.llm_context_window, self.llm_context_safety_margin, self.max_output_tokens)):
+            raise ValueError("模型上下文、余量及输出预算必须为整数。")
+        if (self.max_output_tokens < 1 or self.llm_context_safety_margin < 256 or
+                self.llm_context_window - self.max_output_tokens - self.llm_context_safety_margin < 8192):
+            raise ValueError("模型预算需预留输出和至少 256 token 余量，并留下至少 8192 的输入预算。")
         if self.doc_sync_enabled:
             import re
             from pathlib import PurePosixPath

@@ -16,3 +16,8 @@ DOC_SYNC_INTERVAL_SECONDS = 3600
 
 # 默认本地判断问题类型，必要时补查一次。
 RETRIEVAL_RETRY_ENABLED = True
+
+# 整次模型请求的本地保守预算，包含输入、预留回答及余量。
+# 切换模型时请确保不超过其实际上下文窗口；统计采用 UTF-8 字节保守估算。
+LLM_CONTEXT_WINDOW = 32768
+LLM_CONTEXT_SAFETY_MARGIN = 1024

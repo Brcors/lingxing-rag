@@ -8,7 +8,9 @@ from rag.citations import transform_prose_citations
 from rag.embedding import LocalEmbedding
 from rag.generation.client import DeepSeekClient
 from rag.generation.decomposer import QuestionDecomposer, should_decompose
-from rag.generation.prompts import build_messages
+from rag.generation.prompts import prepare_prompt
+from rag.generation.budget import message_tokens
+from rag.generation.errors import ContextLengthError
 from rag.indexing.store import CorpusStore
 from rag.knowledge.feedback_kb import FeedbackKnowledgeBase
 from rag.retrieval.hybrid import HybridRetriever
@@ -192,8 +194,18 @@ class RAGService:
             cancel_token.check()
         if decomposition_notice:
             bundle.notices.append(decomposition_notice)
-        yield {"type": "sources", "sources": bundle.sources, "notices": bundle.notices, "stats": stats}
         clarification = parameter_clarification(question, retrieval_history, bundle) if stats.get("needs_clarification") else None
+        original_bundle = bundle
+        retrieval_status = ("当前检索仍未确认全部所需信息。明确说明缺失的依据，不得补造未命中的接口或字段。"
+                            if stats.get("retrieval_evidence_incomplete") else "")
+        plan = None
+        if not clarification and bundle.sources and not retrieve_only and self.settings.api_key:
+            plan = prepare_prompt(self.settings, question, bundle, history, memory_summary,
+                                  retrieval_status, retrieval_history)
+            bundle = plan.bundle
+            stats.update(plan.stats, source_count=len(bundle.sources),
+                         context_tokens_estimated=bundle.estimated_tokens, context_length_retry_applied=False)
+        yield {"type": "sources", "sources": bundle.sources, "notices": bundle.notices, "stats": dict(stats)}
         if clarification:
             answer, generated = clarification, False
         elif not bundle.sources:
@@ -210,18 +222,36 @@ class RAGService:
             yield {"type": "status", "message": "正在生成回答…"}
             parts = []
             extra = {"cancel_token": cancel_token} if cancel_token else {}
-            retrieval_status = ("当前检索仍未确认全部所需信息。明确说明缺失的依据，不得补造未命中的接口或字段。"
-                                if stats.get("retrieval_evidence_incomplete") else "")
-            stream = self.llm.stream(build_messages(question, bundle, history, memory_summary, retrieval_status), **extra)
-            try:
-                for token in stream:
-                    if cancel_token:
-                        cancel_token.check()
-                    parts.append(token)
-                    yield {"type": "token", "text": token}
-            finally:
-                if hasattr(stream, "close"):
-                    stream.close()
+            for attempt in range(2):
+                if cancel_token:
+                    cancel_token.check()
+                stream = self.llm.stream(plan.messages, **extra)
+                try:
+                    for token in stream:
+                        if cancel_token:
+                            cancel_token.check()
+                        parts.append(token)
+                        yield {"type": "token", "text": token}
+                    break
+                except ContextLengthError:
+                    # No replay after a partial answer, and never retry unrelated
+                    # auth/validation/network failures as context errors.
+                    if attempt or parts:
+                        raise
+                finally:
+                    if hasattr(stream, "close"):
+                        stream.close()
+                if cancel_token:
+                    cancel_token.check()
+                yield {"type": "status", "message": "上下文超限，正在精简后重试一次…"}
+                plan = prepare_prompt(self.settings, question, original_bundle, history, memory_summary,
+                                      retrieval_status, retrieval_history,
+                                      limit=int(message_tokens(plan.messages) * 0.7))
+                bundle = plan.bundle
+                bundle.notices.append("模型曾返回上下文超限，本次已进一步精简并重试一次。")
+                stats.update(plan.stats, source_count=len(bundle.sources),
+                             context_tokens_estimated=bundle.estimated_tokens, context_length_retry_applied=True)
+                yield {"type": "sources", "sources": bundle.sources, "notices": bundle.notices, "stats": dict(stats)}
             answer = "".join(parts)
             generated = True
         if cancel_token:

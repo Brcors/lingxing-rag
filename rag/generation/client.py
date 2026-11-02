@@ -4,10 +4,24 @@ import threading
 
 import requests
 from rag.generation.cancellation import CancellationToken, call_cancellable, iter_cancellable
+from rag.generation.budget import ensure_request_fits
+from rag.generation.errors import ContextLengthError, LLMError
 
 
-class LLMError(RuntimeError):
-    pass
+def is_context_length_error(data):
+    """Only explicit provider context errors qualify; never echo their payload."""
+    error = data.get("error") if isinstance(data, dict) else None
+    if not isinstance(error, dict):
+        return False
+    codes = {str(error.get(key, "")).lower() for key in ("code", "type")}
+    if codes & {"context_length_exceeded", "max_context_length_exceeded", "context_window_exceeded"}:
+        return True
+    import re
+    message = error.get("message", "")
+    return isinstance(message, str) and bool(re.search(
+        r"(?:maximum|max) context length|context (?:length|window).{0,80}(?:exceed|too (?:long|large))|"
+        r"(?:input|prompt|messages).{0,80}(?:exceeds? .{0,20}(?:context|token)|too (?:long|large))|"
+        r"上下文.{0,20}(?:超出|超过|过长)", message, re.I))
 
 
 class DeepSeekClient:
@@ -16,6 +30,7 @@ class DeepSeekClient:
         self.settings = settings
 
     def payload(self, messages, stream, max_tokens=None, temperature=None):
+        ensure_request_fits(self.settings, messages, max_tokens)
         return {
             "model": self.settings.llm_model,
             "messages": messages,
@@ -28,6 +43,7 @@ class DeepSeekClient:
     def _open(self, messages, stream, max_tokens=None, temperature=None, cancel_token=None):
         if not self.settings.api_key:
             raise LLMError("请在 config.py 的 DEEPSEEK_API_KEY 中填写 API key，保存并重启服务。")
+        payload = self.payload(messages, stream, max_tokens, temperature)
         url = self.settings.base_url.rstrip("/") + "/chat/completions"
         headers = {"Content-Type": "application/json", "Authorization": "Bearer " + self.settings.api_key}
         for attempt in range(3):
@@ -35,7 +51,7 @@ class DeepSeekClient:
                 cancel_token.check()
             try:
                 response = call_cancellable(lambda: requests.post(url, headers=headers,
-                                         json=self.payload(messages, stream, max_tokens, temperature),
+                                         json=payload,
                                          timeout=(10, self.settings.timeout), stream=stream or bool(cancel_token)),
                                             cancel_token, response=True)
             except requests.ConnectTimeout:
@@ -62,7 +78,18 @@ class DeepSeekClient:
                 continue
             if not response.ok:
                 status = response.status_code
-                response.close()
+                try:
+                    if status in (400, 413, 422):
+                        if cancel_token:
+                            cancel_token.add_response(response)
+                        try:
+                            data = call_cancellable(response.json, cancel_token)
+                        except (ValueError, requests.RequestException):
+                            data = None
+                        if is_context_length_error(data):
+                            raise ContextLengthError("模型上下文长度超限，请缩小问题范围或分步提问。")
+                finally:
+                    self._close_response(response, cancel_token)
                 known = {401: "DeepSeek API key 无效，请检查配置。",
                          402: "DeepSeek 账户余额不足。", 403: "DeepSeek 拒绝了该请求。",
                          429: "DeepSeek 请求过于频繁，请稍后重试。"}
@@ -131,6 +158,8 @@ class DeepSeekClient:
                 if not isinstance(data, dict):
                     raise LLMError("DeepSeek 返回的流数据结构不正确，请重试。")
                 if data.get("error"):
+                    if not received and is_context_length_error(data):
+                        raise ContextLengthError("模型上下文长度超限，请缩小问题范围或分步提问。")
                     raise LLMError("DeepSeek 生成过程中发生错误，请重试。")
                 choices = data.get("choices") or []
                 if not isinstance(choices, list):
